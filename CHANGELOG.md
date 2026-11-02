@@ -2,13 +2,27 @@
 
 ## 1.2.0
 
-- renommage technique du module : `evil-playlist` → `evilbram-toolbox` ;
-- renommage du dépôt cible : `ctotone/evil-toolbox` ;
-- URLs `manifest` et `download` basculées vers le nouveau dépôt et `releases/latest/download/...` ;
-- conservation sans reconstruction des compendiums Playlist et Macro existants ;
-- ajout d'une macro de migration ponctuelle pour corriger les anciennes macros de world ;
-- mise à jour de `FX - Éclair` dans le compendium Macro pour utiliser `evilbram-toolbox.soundboard-sfx` ;
-- aucune modification fonctionnelle des playlists, bruitages ou Ownership Viewer.
+- ID Foundry finalisé en `evil-toolbox` ;
+- dépôt et URLs de distribution alignés sur `ctotone/evil-toolbox` ;
+- conservation des compendiums existants sans reconstruction des playlists ;
+- mise à jour de `FX - Éclair` pour utiliser `evil-toolbox.soundboard-sfx` ;
+- ajout de la fonctionnalité `Visuels MJ` :
+  - bibliothèque propre à chaque world ;
+  - ajout d'images via le File Picker natif ;
+  - tri alphabétique selon le nom défini par le MJ ;
+  - galerie scrollable avec barre d'actions fixe ;
+  - confirmation avant le premier affichage ;
+  - mémorisation de l'état déjà affiché ;
+  - réinitialisation globale des avertissements ;
+  - bordure rouge pour les visuels jamais affichés et verte après affichage ;
+  - diffusion aux joueurs via le socket natif `module.evil-toolbox` ;
+  - popup sans titre ni nom interne ;
+  - centrage automatique dans le viewport ;
+  - flou d'arrière-plan ;
+  - croix de fermeture intégrée au visuel avec hover et tooltip ;
+  - fermeture libre côté joueur et fermeture forcée globale côté MJ ;
+  - aucun changement de scène et aucun message dans le chat.
+- `Ownership Viewer` conservé sans modification fonctionnelle.
 
 ## 1.1.0
 

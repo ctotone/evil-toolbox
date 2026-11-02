@@ -1,0 +1,264 @@
+.evilbram-visual-library .window-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.evilbram-visual-library-content {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  overflow: hidden;
+}
+
+.evilbram-visual-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.evilbram-visual-toolbar > button {
+  width: auto;
+  min-height: 34px;
+}
+
+.evilbram-visual-toolbar .evilbram-reset-warnings {
+  margin-left: auto;
+}
+
+.evilbram-visual-toolbar .evilbram-close-players {
+  margin-left: 0;
+}
+
+.evilbram-visual-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 0.75rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.35rem;
+}
+
+.evilbram-visual-card {
+  min-width: 0;
+  min-height: 0;
+  align-self: start;
+  border: 1px solid var(--color-border-light-2, #666);
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.evilbram-visual-preview {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 140px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: #111;
+  cursor: pointer;
+}
+
+.evilbram-visual-preview img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 120ms ease;
+}
+
+.evilbram-visual-preview:hover img {
+  transform: scale(1.03);
+}
+
+.evilbram-visual-send {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.35rem 0.5rem;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.evilbram-visual-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+}
+
+.evilbram-visual-card-footer strong {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.evilbram-visual-card-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+}
+
+.evilbram-visual-card-actions button {
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+}
+
+.evilbram-visual-empty {
+  flex: 1 1 auto;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.evilbram-visual-empty > i {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.evilbram-player-visual .window-content {
+  padding: 0;
+  overflow: hidden;
+  background: #050505;
+}
+
+.evilbram-player-visual-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  background: #050505;
+}
+
+.evilbram-player-visual-content img {
+  display: block;
+  max-width: min(92vw, 100%);
+  max-height: 82vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+/* Popup joueur : aucun titre visible, fermeture native conservée. */
+.evilbram-player-visual .window-header .window-title,
+.evilbram-player-visual .window-header .window-icon {
+  display: none;
+}
+
+.evilbram-player-visual .window-header {
+  justify-content: flex-end;
+}
+
+.evilbram-player-visual .evilbram-player-visual-content {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.evilbram-player-visual .evilbram-player-visual-content img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+
+/* Flou visuel derrière la popup joueur, sans intercepter les clics. */
+.evilbram-player-visual-backdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.14);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Popup joueur : titre masqué et bouton de fermeture intégré au visuel. */
+.evilbram-player-visual.window-app .window-header,
+.evilbram-player-visual .window-header,
+.evilbram-player-visual .window-titlebar,
+.evilbram-player-visual header.application-header {
+  display: none !important;
+}
+
+.evilbram-player-visual {
+  overflow: visible;
+}
+
+.evilbram-player-visual .window-content {
+  padding: 0;
+  background: transparent;
+  position: relative;
+}
+
+.evilbram-player-visual .evilbram-player-visual-content {
+  position: relative;
+}
+
+.evilbram-player-visual-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.evilbram-player-visual-close:hover,
+.evilbram-player-visual-close:focus-visible {
+  background: rgba(0, 0, 0, 0.98);
+  transform: scale(1.12);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+  outline: none;
+}
+
+.evilbram-player-visual-close i {
+  font-size: 1.2rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+
+/* État d'affichage des visuels dans la galerie MJ. */
+.evilbram-visual-card.evilbram-visual-unseen {
+  border-color: #c62828;
+  box-shadow: inset 0 0 0 1px rgba(198, 40, 40, 0.35);
+}
+
+.evilbram-visual-card.evilbram-visual-shown {
+  border-color: #2e7d32;
+  box-shadow: inset 0 0 0 1px rgba(46, 125, 50, 0.35);
+}

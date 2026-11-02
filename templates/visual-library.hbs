@@ -1,0 +1,53 @@
+<section class="evilbram-visual-library-content">
+  <header class="evilbram-visual-toolbar">
+    <button type="button" data-action="add">
+      <i class="fa-solid fa-plus"></i>
+      Ajouter un visuel
+    </button>
+    <button type="button" class="evilbram-reset-warnings" data-action="resetWarnings">
+      <i class="fa-solid fa-rotate-left"></i>
+      Réinitialiser avertissement
+    </button>
+    <button type="button" class="evilbram-close-players" data-action="closePlayers">
+      <i class="fa-solid fa-xmark"></i>
+      Fermer chez les joueurs
+    </button>
+  </header>
+
+  {{#if hasVisuals}}
+    <div class="evilbram-visual-grid">
+      {{#each visuals}}
+        <article class="evilbram-visual-card {{#if hasBeenShown}}evilbram-visual-shown{{else}}evilbram-visual-unseen{{/if}}">
+          <button
+            type="button"
+            class="evilbram-visual-preview"
+            data-action="show"
+            data-visual-id="{{id}}"
+            title="Afficher {{name}} aux joueurs"
+          >
+            <img src="{{path}}" alt="{{name}}">
+            <span class="evilbram-visual-send"><i class="fa-solid fa-display"></i> Afficher</span>
+          </button>
+
+          <div class="evilbram-visual-card-footer">
+            <strong title="{{name}}">{{name}}</strong>
+            <div class="evilbram-visual-card-actions">
+              <button type="button" data-action="rename" data-visual-id="{{id}}" title="Renommer">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button type="button" data-action="delete" data-visual-id="{{id}}" title="Supprimer">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="evilbram-visual-empty">
+      <i class="fa-regular fa-images"></i>
+      <p>Aucun visuel préparé pour ce world.</p>
+      <p>Ajoute une image, puis clique sur sa vignette pendant la partie pour l'afficher aux joueurs.</p>
+    </div>
+  {{/if}}
+</section>
