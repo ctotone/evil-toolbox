@@ -1,8 +1,8 @@
 {
-  "id": "evil-playlist",
+  "id": "evilbram-toolbox",
   "title": "Evilbram Toolbox",
   "description": "Boîte à outils transversale pour Foundry VTT : playlists, bruitages, macros MJ/joueur, visualisation des permissions et utilitaires réutilisables entre plusieurs mondes.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "authors": [
     {
       "name": "Evilbram",
@@ -15,9 +15,9 @@
     "minimum": "13",
     "verified": "14"
   },
-  "url": "https://github.com/ctotone/evil-playlist",
-  "manifest": "https://github.com/ctotone/evil-playlist/releases/latest/download/module.json",
-  "download": "https://github.com/ctotone/evil-playlist/releases/latest/download/evilbram-toolbox.zip",
+  "url": "https://github.com/ctotone/evil-toolbox",
+  "manifest": "https://github.com/ctotone/evil-toolbox/releases/latest/download/module.json",
+  "download": "https://github.com/ctotone/evil-toolbox/releases/latest/download/evil-toolbox.zip",
   "languages": [
     {
       "lang": "fr",

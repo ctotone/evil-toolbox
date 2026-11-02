@@ -1,8 +1,8 @@
 # Evilbram Toolbox
 
-Version : 1.1.0
+Version : 1.2.0
 
-Identifiant technique conservé : `evil-playlist`
+Identifiant technique : `evilbram-toolbox`
 
 ## Compendiums
 
@@ -27,6 +27,21 @@ Macros incluses :
 La catégorie JEU de la Console MJ est volontairement conservée comme zone de personnalisation locale propre à chaque world.
 
 
+
+## Renommage technique 1.2.0
+
+Le module a été renommé techniquement afin d'être cohérent avec son rôle actuel :
+
+- ancien ID Foundry : `evil-playlist`
+- nouvel ID Foundry : `evilbram-toolbox`
+- dépôt GitHub : `ctotone/evil-toolbox`
+- asset de release : `evil-toolbox.zip`
+
+Les compendiums existants sont conservés tels quels ; leurs namespaces deviennent automatiquement
+`evilbram-toolbox.playlists-jdr`, `evilbram-toolbox.soundboard-sfx` et `evilbram-toolbox.macros`.
+
+Les anciennes copies de macros déjà importées dans des worlds et contenant encore `evil-playlist` doivent être migrées ponctuellement vers `evilbram-toolbox`.
+
 ## Visualisation des permissions
 
 Evilbram Toolbox intègre la fonctionnalité **Ownership Viewer**.
@@ -48,4 +63,4 @@ La fonctionnalité est active automatiquement lorsque Evilbram Toolbox est activ
 
 ## Statut
 
-Cette archive correspond à la candidate 1.1.0 intégrant Ownership Viewer dans Evilbram Toolbox.
+Version stable 1.2.0 : renommage technique finalisé vers `evilbram-toolbox`, compendiums conservés et `FX - Éclair` compatible avec le nouveau namespace.
