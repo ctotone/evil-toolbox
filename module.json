@@ -5,7 +5,10 @@
   "version": "1.1.0",
   "authors": [
     {
-      "name": "Evilbram"
+      "name": "Evilbram",
+      "url": "https://github.com/ctotone",
+      "email": "ctotone@gmail.com",
+      "discord": "evilbram"
     }
   ],
   "compatibility": {
