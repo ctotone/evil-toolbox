@@ -1,0 +1,39 @@
+{
+  "schema": "evil-light-toolkit.ambient-light-preset",
+  "schemaVersion": 1,
+  "foundryGeneration": 14,
+  "id": "vision-zone-draft",
+  "label": "Zone de vision",
+  "ambientLight": {
+    "name": "Zone de vision",
+    "walls": true,
+    "vision": true,
+    "hidden": false,
+    "rotation": 0,
+    "config": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0,
+      "angle": 360,
+      "bright": 0.0,
+      "dim": 10.0,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "attenuation": 1,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 0,
+        "intensity": 0,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  }
+}

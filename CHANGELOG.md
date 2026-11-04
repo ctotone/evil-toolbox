@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.0
+
+- intégration native de `Evilbram Lighting Toolkit` dans Evil Toolbox ;
+- compatibilité minimale portée à Foundry VTT v14 ;
+- conservation des presets intégrés et de l’intégration optionnelle SmallTime ;
+- conservation du schéma historique `evil-light-toolkit.ambient-light-preset` et des flags `evil-light-toolkit` ;
+- ajout de l’API `game.evilbramToolbox.lighting.open()` ;
+- maintien du bouton Lighting Toolkit dans les contrôles d’éclairage Foundry ;
+- mise à jour de la Console MJ générique avec accès natif à Lighting Toolkit et Visuels MJ ;
+- ajout de la macro `PROD - Visuels MJ` au compendium `EVILBRAM - Macros`.
+
 ## 1.2.0
 
 - ID Foundry finalisé en `evil-toolbox` ;

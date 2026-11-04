@@ -1,0 +1,35 @@
+{
+  "schema": "evil-light-toolkit.ambient-light-preset",
+  "schemaVersion": 1,
+  "foundryGeneration": 14,
+  "id": "lantern-exterior-draft",
+  "label": "Lanterne extérieure",
+  "ambientLight": {
+    "name": "Lanterne extérieure",
+    "walls": true,
+    "vision": false,
+    "hidden": false,
+    "rotation": 0,
+    "config": {
+      "dim": 7.5,
+      "bright": 4.0,
+      "color": "#ffc078",
+      "alpha": 0.6,
+      "luminosity": 0.78,
+      "attenuation": 1,
+      "saturation": 0.1,
+      "contrast": 0.38,
+      "shadows": 0.2,
+      "animation": {
+        "type": "torch",
+        "speed": 1,
+        "intensity": 1,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0.45,
+        "max": 1
+      }
+    }
+  }
+}

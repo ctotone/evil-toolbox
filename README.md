@@ -1,6 +1,6 @@
 # Evilbram Toolbox
 
-Version : 1.2.0
+Version : 1.3.0
 
 Identifiant technique : `evil-toolbox`
 
@@ -20,6 +20,7 @@ Macros incluses dans le compendium :
 - PROD - Lumière
 - PROD - Couper musique
 - PROD - Reset brouillard
+- PROD - Visuels MJ
 - FX - Météo
 - FX - Éclair
 - FX - Tic Tac
@@ -72,11 +73,27 @@ Les fichiers image restent dans les données Foundry.
 - asset de release : `evil-toolbox.zip`
 - manifest : `releases/latest/download/module.json`
 
+
+## Lighting Toolkit
+
+Evil Toolbox intègre nativement **Evilbram Lighting Toolkit** :
+
+- profils de scène Extérieur / Intérieur / Obscurité ;
+- réglages Jour / Crépuscule / Nuit / Restaurer ;
+- réglage de l’échelle de grille ;
+- intégration optionnelle SmallTime ;
+- presets de lumières intégrés ;
+- clic pour charger un preset dans la palette native Foundry v14 ;
+- glisser-déposer d’un preset directement sur la scène ;
+- export d’une lumière sélectionnée en preset JSON.
+
+Les formats historiques `evil-light-toolkit.ambient-light-preset` et les flags `evil-light-toolkit` sont conservés pour rester compatibles avec les presets et lumières existants.
+
 ## Compatibilité
 
-- Foundry VTT minimum : v13
+- Foundry VTT minimum : v14
 - Vérifié : v14
 
 ## Statut
 
-Version 1.2.0 finalisée et validée sur Foundry VTT v14.
+Version 1.3.0 finalisée et validée sur Foundry VTT v14.

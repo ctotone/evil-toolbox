@@ -1,15 +1,5 @@
-2026/11/02-20:12:52.422 4d00 Recovering log #32
-2026/11/02-20:12:52.425 4d00 Delete type=0 #32
-2026/11/02-20:12:52.425 4d00 Delete type=3 #30
-2026/11/02-20:13:42.044 1cc0 Level-0 table #37: started
-2026/11/02-20:13:42.052 1cc0 Level-0 table #37: 3196 bytes OK
-2026/11/02-20:13:42.053 1cc0 Delete type=0 #35
-2026/11/02-20:13:42.055 1cc0 Manual compaction at level-0 from '!macros!Dc9qysmn6xDbGIPZ' @ 72057594037927935 : 1 .. '!macros!zjm6sZoVCVCLBoa4' @ 0 : 0; will stop at (end)
-2026/11/02-20:13:42.055 1cc0 Manual compaction at level-1 from '!macros!Dc9qysmn6xDbGIPZ' @ 72057594037927935 : 1 .. '!macros!zjm6sZoVCVCLBoa4' @ 0 : 0; will stop at '!macros!LQC1MopxuXm1OXwx' @ 28 : 0
-2026/11/02-20:13:42.055 1cc0 Compacting 1@1 + 1@2 files
-2026/11/02-20:13:42.058 1cc0 Generated table #38@1: 8 keys, 22293 bytes
-2026/11/02-20:13:42.058 1cc0 Compacted 1@1 + 1@2 files => 22293 bytes
-2026/11/02-20:13:42.058 1cc0 compacted to: files[ 0 0 1 0 0 0 0 ]
-2026/11/02-20:13:42.058 1cc0 Delete type=2 #27
-2026/11/02-20:13:42.059 1cc0 Delete type=2 #37
-2026/11/02-20:13:42.061 1cc0 Manual compaction at level-1 from '!macros!LQC1MopxuXm1OXwx' @ 28 : 0 .. '!macros!zjm6sZoVCVCLBoa4' @ 0 : 0; will stop at (end)
+2026/11/04-10:16:38.436 35a0 Log #41: 0 ops saved to Table #42 OK
+2026/11/04-10:16:38.437 35a0 Archiving C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\macros/000041.log: OK
+2026/11/04-10:16:38.437 35a0 Table #38: 8 entries OK
+2026/11/04-10:16:38.439 35a0 Archiving C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\macros/MANIFEST-000039: OK
+2026/11/04-10:16:38.442 35a0 **** Repaired leveldb C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\macros; recovered 1 files; 22293 bytes. Some data may have been lost. ****

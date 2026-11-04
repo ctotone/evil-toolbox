@@ -1,0 +1,35 @@
+{
+  "schema": "evil-light-toolkit.ambient-light-preset",
+  "schemaVersion": 1,
+  "foundryGeneration": 14,
+  "id": "campfire-draft",
+  "label": "Feu de camp",
+  "ambientLight": {
+    "name": "Feu de camp",
+    "walls": true,
+    "vision": false,
+    "hidden": false,
+    "rotation": 0,
+    "config": {
+      "dim": 10.0,
+      "bright": 5.0,
+      "color": "#ff8f45",
+      "alpha": 0.62,
+      "luminosity": 0.82,
+      "attenuation": 1,
+      "saturation": 0.22,
+      "contrast": 0.5,
+      "shadows": 0.3,
+      "animation": {
+        "type": "torch",
+        "speed": 3,
+        "intensity": 4,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0.35,
+        "max": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "evil-light-toolkit.ambient-light-preset",
+  "schemaVersion": 1,
+  "foundryGeneration": 14,
+  "id": "oil-lamp-draft",
+  "label": "Lampe à pétrole",
+  "ambientLight": {
+    "name": "Lampe à pétrole",
+    "walls": true,
+    "vision": false,
+    "hidden": false,
+    "rotation": 0,
+    "config": {
+      "dim": 5.5,
+      "bright": 3.0,
+      "color": "#ffb76a",
+      "alpha": 0.58,
+      "luminosity": 0.72,
+      "attenuation": 1,
+      "saturation": 0.12,
+      "contrast": 0.45,
+      "shadows": 0.22,
+      "animation": {
+        "type": "torch",
+        "speed": 1,
+        "intensity": 1,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0.45,
+        "max": 1
+      }
+    }
+  }
+}

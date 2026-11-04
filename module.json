@@ -1,8 +1,8 @@
 {
   "id": "evil-toolbox",
   "title": "Evilbram Toolbox",
-  "description": "Boîte à outils transversale pour Foundry VTT : playlists, bruitages, macros MJ/joueur, visualisation des permissions, partage de visuels et utilitaires réutilisables entre plusieurs mondes.",
-  "version": "1.2.0",
+  "description": "Boîte à outils transversale pour Foundry VTT : playlists, bruitages, macros MJ/joueur, visualisation des permissions, partage de visuels, outils d’éclairage et utilitaires réutilisables entre plusieurs mondes.",
+  "version": "1.3.0",
   "authors": [
     {
       "name": "Evilbram",
@@ -12,7 +12,7 @@
     }
   ],
   "compatibility": {
-    "minimum": "13",
+    "minimum": "14",
     "verified": "14"
   },
   "url": "https://github.com/ctotone/evil-toolbox",
@@ -23,6 +23,11 @@
       "lang": "fr",
       "name": "Français",
       "path": "lang/fr.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
     }
   ],
   "packs": [
@@ -83,7 +88,11 @@
   ],
   "styles": [
     "styles/tools/ownership-viewer.css",
-    "styles/tools/visual-library.css"
+    "styles/tools/visual-library.css",
+    "styles/tools/lighting-toolkit.css"
   ],
-  "socket": true
+  "socket": true,
+  "esmodules": [
+    "scripts/lighting-toolkit/main.mjs"
+  ]
 }
