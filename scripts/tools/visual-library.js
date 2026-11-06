@@ -8,6 +8,7 @@
 const EVILBRAM_TOOLBOX_ID = "evil-toolbox";
 const EVILBRAM_VISUALS_SETTING = "visualLibrary";
 const EVILBRAM_VISUALS_SOCKET = `module.${EVILBRAM_TOOLBOX_ID}`;
+const EVILBRAM_VISUALS_DRAG_TYPE = "application/x-evil-toolbox-visual";
 
 let evilbramVisualLibraryApp = null;
 let evilbramPlayerVisualApp = null;
@@ -54,6 +55,293 @@ async function promptVisualName({ title, value }) {
   if (!result) return null;
   const name = String(result.name ?? "").trim();
   return name || null;
+}
+
+function getTransferString(event, type) {
+  try {
+    return String(event?.dataTransfer?.getData(type) ?? "").trim();
+  } catch {
+    return "";
+  }
+}
+
+function normalizeImagePath(path) {
+  const value = String(path ?? "").trim();
+  if (!value) return "";
+  if (value.startsWith("data:image/")) return value;
+
+  try {
+    const url = new URL(value, window.location.href);
+    if (url.origin === window.location.origin) {
+      return `${url.pathname.replace(/^\/+/, "")}${url.search}${url.hash}`;
+    }
+  } catch {}
+
+  return value;
+}
+
+function looksLikeImagePath(path) {
+  const value = normalizeImagePath(path);
+  if (!value) return false;
+  if (value.startsWith("data:image/")) return true;
+
+  const clean = value.split("?")[0].split("#")[0].toLowerCase();
+  return /\.(apng|avif|bmp|gif|jpe?g|png|svg|webp)$/i.test(clean);
+}
+
+function imageSuggestion(name, path) {
+  return String(name ?? "").trim() || visualNameFromPath(path);
+}
+
+function extractImageFromHtml(html) {
+  if (!html) return null;
+
+  try {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const image = doc.querySelector("img[src]");
+    if (!image) return null;
+
+    const path = normalizeImagePath(image.getAttribute("src")?.trim());
+    if (!looksLikeImagePath(path)) return null;
+
+    return {
+      path,
+      suggestedName: imageSuggestion(
+        image.getAttribute("alt") || image.getAttribute("title"),
+        path
+      )
+    };
+  } catch {
+    return null;
+  }
+}
+
+function extractImageFromRawData(data) {
+  if (!data || typeof data !== "object") return null;
+
+  const candidates = [
+    data.src,
+    data.path,
+    data.img,
+    data.image,
+    data?.texture?.src
+  ];
+
+  const path = normalizeImagePath(candidates.find(candidate => looksLikeImagePath(candidate)));
+  if (!path) return null;
+
+  return {
+    path,
+    suggestedName: imageSuggestion(data.name || data.title, path)
+  };
+}
+
+function extractImageFromDocument(document) {
+  if (!document) return null;
+
+  if (document.documentName === "JournalEntryPage" && document.type === "image" && looksLikeImagePath(document.src)) {
+    return {
+      path: normalizeImagePath(document.src),
+      suggestedName: imageSuggestion(document.name, document.src)
+    };
+  }
+
+  const path = normalizeImagePath([document.src, document.img, document?.texture?.src]
+    .find(candidate => looksLikeImagePath(candidate)));
+
+  if (!path) return null;
+
+  return {
+    path,
+    suggestedName: imageSuggestion(document.name || document.title, path)
+  };
+}
+
+async function resolveDroppedVisual(event) {
+  const customPayload = getTransferString(event, EVILBRAM_VISUALS_DRAG_TYPE);
+  if (customPayload) {
+    try {
+      const parsed = JSON.parse(customPayload);
+      const customImage = extractImageFromRawData(parsed);
+      if (customImage) return customImage;
+    } catch {}
+  }
+
+  const dragData = TextEditor.getDragEventData?.(event);
+
+  const directDataImage = extractImageFromRawData(dragData);
+  if (directDataImage) return directDataImage;
+
+  if (dragData?.uuid) {
+    const document = await fromUuid(dragData.uuid);
+    const documentImage = extractImageFromDocument(document);
+    if (documentImage) return documentImage;
+  }
+
+  const uriList = getTransferString(event, "text/uri-list")
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .find(line => line && !line.startsWith("#"));
+
+  if (looksLikeImagePath(uriList)) {
+    return {
+      path: normalizeImagePath(uriList),
+      suggestedName: visualNameFromPath(uriList)
+    };
+  }
+
+  const htmlImage = extractImageFromHtml(getTransferString(event, "text/html"));
+  if (htmlImage) return htmlImage;
+
+  const plain = getTransferString(event, "text/plain");
+  if (looksLikeImagePath(plain)) {
+    return {
+      path: normalizeImagePath(plain),
+      suggestedName: visualNameFromPath(plain)
+    };
+  }
+
+  try {
+    const parsed = JSON.parse(plain || "null");
+    const parsedImage = extractImageFromRawData(parsed);
+    if (parsedImage) return parsedImage;
+  } catch {}
+
+  return null;
+}
+
+async function addVisualEntry({ path, suggestedName }) {
+  path = normalizeImagePath(path);
+  if (!looksLikeImagePath(path)) return false;
+
+  const name = await promptVisualName({
+    title: "Nom du visuel",
+    value: imageSuggestion(suggestedName, path)
+  });
+  if (!name) return false;
+
+  const library = getVisualLibrary();
+  library.items.push({
+    id: foundry.utils.randomID(16),
+    name,
+    path,
+    hasBeenShown: false
+  });
+
+  await setVisualLibrary(library.items);
+  return true;
+}
+
+function normalizeHookElement(element) {
+  if (element instanceof HTMLElement) return element;
+  if (element?.[0] instanceof HTMLElement) return element[0];
+  return null;
+}
+
+function getJournalDocumentFromApp(app) {
+  const candidates = [
+    app?.document,
+    app?.object,
+    app?.page,
+    app?.journalEntry,
+    app?.journalEntryPage
+  ];
+
+  return candidates.find(document =>
+    document?.documentName === "JournalEntry" ||
+    document?.documentName === "JournalEntryPage"
+  ) ?? null;
+}
+
+function isJournalApplication(app) {
+  if (getJournalDocumentFromApp(app)) return true;
+  return String(app?.constructor?.name ?? "").includes("JournalEntry");
+}
+
+function prepareJournalImageForDrag(image) {
+  if (!(image instanceof HTMLImageElement)) return;
+  if (!looksLikeImagePath(image.getAttribute("src") || image.currentSrc || image.src)) return;
+
+  // Ne touche pas aux images servant d'icône ou de contrôle d'interface.
+  if (image.closest("button, .window-header, .window-controls, nav, .prosemirror-menu, .editor-menu")) return;
+
+  image.draggable = true;
+  image.setAttribute("draggable", "true");
+  image.dataset.evilbramVisualDraggable = "true";
+  image.classList.add("evilbram-journal-visual-draggable");
+}
+
+function prepareJournalImagesForDrag(app, element) {
+  if (!game.user?.isGM || !isJournalApplication(app)) return;
+
+  const root = normalizeHookElement(element) ?? normalizeHookElement(app?.element);
+  if (!root) return;
+
+  for (const image of root.querySelectorAll("img[src]")) {
+    prepareJournalImageForDrag(image);
+  }
+
+  // Certains éditeurs reconstruisent une partie du DOM après le rendu initial.
+  // L'observer garantit que les nouvelles images deviennent elles aussi draggables.
+  app._evilbramJournalImageObserver?.disconnect?.();
+  const observer = new MutationObserver(mutations => {
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (!(node instanceof Element)) continue;
+        if (node.matches?.("img[src]")) prepareJournalImageForDrag(node);
+        for (const image of node.querySelectorAll?.("img[src]") ?? []) {
+          prepareJournalImageForDrag(image);
+        }
+      }
+    }
+  });
+
+  observer.observe(root, { childList: true, subtree: true });
+  app._evilbramJournalImageObserver = observer;
+}
+
+function handleJournalImagePointerDown(event) {
+  if (!game.user?.isGM) return;
+
+  const image = event.target?.closest?.("img[src]");
+  if (!image?.dataset?.evilbramVisualDraggable) return;
+
+  // Réaffirme l'attribut juste avant l'initiation du drag, au cas où
+  // ProseMirror ait resynchronisé le DOM entre-temps.
+  image.draggable = true;
+  image.setAttribute("draggable", "true");
+}
+
+function handleGlobalImageDragStart(event) {
+  if (!game.user?.isGM) return;
+
+  const image = event.target?.closest?.("img[src]");
+  if (!image || !event.dataTransfer) return;
+
+  const path = normalizeImagePath(
+    image.getAttribute("src") || image.currentSrc || image.src
+  );
+  if (!looksLikeImagePath(path)) return;
+
+  const payload = {
+    path,
+    name: image.getAttribute("alt") || image.getAttribute("title") || visualNameFromPath(path)
+  };
+
+  try {
+    event.dataTransfer.effectAllowed = "copy";
+    event.dataTransfer.setData(
+      EVILBRAM_VISUALS_DRAG_TYPE,
+      JSON.stringify(payload)
+    );
+    event.dataTransfer.setData("text/plain", path);
+  } catch {}
+
+  // Pour les images que Toolbox a explicitement rendues draggables dans un
+  // Journal, ne laisse pas ProseMirror annuler ou détourner le dragstart.
+  if (image.dataset?.evilbramVisualDraggable === "true") {
+    event.stopPropagation();
+  }
 }
 
 function emitVisualMessage(type, payload = {}) {
@@ -184,25 +472,85 @@ class EvilbramVisualLibraryApp extends foundry.applications.api.HandlebarsApplic
     };
   }
 
+  async _onRender(context, options) {
+    await super._onRender(context, options);
+
+    const dropTarget = this.element?.querySelector(".evilbram-visual-library-content");
+    const appElement = this.element;
+    if (!dropTarget || !appElement) return;
+
+    this._evilbramDropController?.abort();
+    const controller = new AbortController();
+    this._evilbramDropController = controller;
+
+    let dragDepth = 0;
+    const setDropState = active => {
+      dropTarget.classList.toggle("evilbram-drop-target", active);
+      dropTarget.setAttribute("aria-dropeffect", active ? "copy" : "none");
+    };
+
+    const isInsideApp = event => appElement.contains(event.target);
+
+    const onDragEnter = event => {
+      if (!isInsideApp(event)) return;
+      event.preventDefault();
+      dragDepth += 1;
+      setDropState(true);
+    };
+
+    const onDragOver = event => {
+      if (!isInsideApp(event)) return;
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
+      setDropState(true);
+    };
+
+    const onDragLeave = event => {
+      if (!isInsideApp(event)) return;
+      event.preventDefault();
+      dragDepth = Math.max(0, dragDepth - 1);
+      if (dragDepth === 0) setDropState(false);
+    };
+
+    const onDrop = async event => {
+      if (!isInsideApp(event)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      dragDepth = 0;
+      setDropState(false);
+
+      const dropped = await resolveDroppedVisual(event);
+      if (!dropped?.path) {
+        ui.notifications.warn(
+          "Impossible de récupérer une image depuis ce glisser-déposer. Dépose une image de Journal ou une page de Journal de type Image."
+        );
+        return;
+      }
+
+      const added = await addVisualEntry(dropped);
+      if (!added) return;
+      await this.render();
+    };
+
+    // Phase de capture : nécessaire pour les images HTML des pages texte,
+    // dont l'éditeur Foundry peut intercepter le drag/drop avant le bubbling.
+    appElement.addEventListener("dragenter", onDragEnter, { capture: true, signal: controller.signal });
+    appElement.addEventListener("dragover", onDragOver, { capture: true, signal: controller.signal });
+    appElement.addEventListener("dragleave", onDragLeave, { capture: true, signal: controller.signal });
+    appElement.addEventListener("drop", onDrop, { capture: true, signal: controller.signal });
+  }
+
+
   static async #onAdd() {
     const picker = new foundry.applications.apps.FilePicker({
       type: "image",
       callback: async path => {
-        const name = await promptVisualName({
-          title: "Nom du visuel",
-          value: visualNameFromPath(path)
-        });
-        if (!name) return;
-
-        const library = getVisualLibrary();
-        library.items.push({
-          id: foundry.utils.randomID(16),
-          name,
+        const added = await addVisualEntry({
           path,
-          hasBeenShown: false
+          suggestedName: visualNameFromPath(path)
         });
 
-        await setVisualLibrary(library.items);
+        if (!added) return;
         await this.render();
       }
     });
@@ -437,12 +785,22 @@ Hooks.once("init", () => {
 
 Hooks.once("ready", () => {
   game.socket.on(EVILBRAM_VISUALS_SOCKET, handleVisualSocket);
+  document.addEventListener("pointerdown", handleJournalImagePointerDown, true);
+  document.addEventListener("dragstart", handleGlobalImageDragStart, true);
 
   game.evilbramToolbox ??= {};
   game.evilbramToolbox.visuals = {
     open: openVisualLibrary,
     closePlayers: closeVisualForPlayers
   };
+});
+
+Hooks.on("renderApplicationV2", (app, element) => {
+  prepareJournalImagesForDrag(app, element);
+});
+
+Hooks.on("renderApplicationV1", (app, element) => {
+  prepareJournalImagesForDrag(app, element);
 });
 
 Hooks.on("getSceneControlButtons", controls => {

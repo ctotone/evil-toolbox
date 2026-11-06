@@ -1,0 +1,100 @@
+<section class="evilbram-pm-dashboard-content">
+  <aside class="evilbram-pm-sidebar">
+    <header>
+      <strong>Joueurs</strong>
+      <span>Destinataires du prochain envoi</span>
+    </header>
+
+    {{#if hasPlayers}}
+      <div class="evilbram-pm-player-list">
+        {{#each players}}
+          <div class="evilbram-pm-player {{#if selectedThread}}selected{{/if}}">
+            <label class="evilbram-pm-recipient-check" title="Inclure dans le prochain envoi">
+              <input
+                type="checkbox"
+                data-pm-recipient="{{id}}"
+                {{#if checked}}checked{{/if}}
+                {{#unless active}}disabled{{/unless}}
+              >
+            </label>
+
+            <button
+              type="button"
+              class="evilbram-pm-player-open"
+              data-action="selectConversation"
+              data-user-id="{{id}}"
+              title="Ouvrir la conversation avec {{label}}"
+            >
+              <img src="{{img}}" alt="">
+              <span class="evilbram-pm-player-text">
+                <strong>{{label}}</strong>
+                <small>
+                  {{#if characterName}}{{userName}} · {{/if}}
+                  {{#if active}}connecté{{else}}hors ligne{{/if}}
+                </small>
+              </span>
+              {{#if unread}}<span class="evilbram-pm-unread">{{unread}}</span>{{/if}}
+            </button>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="evilbram-pm-empty">Aucun joueur disponible.</p>
+    {{/if}}
+  </aside>
+
+  <main class="evilbram-pm-main">
+    {{#if selectedUser}}
+      <header class="evilbram-pm-thread-header">
+        <img src="{{selectedUser.img}}" alt="">
+        <div>
+          <strong>{{selectedUser.label}}</strong>
+          {{#if selectedUser.characterName}}<small>{{selectedUser.userName}}</small>{{/if}}
+        </div>
+      </header>
+
+      <div class="evilbram-pm-history">
+        {{#if hasHistory}}
+          {{#each history}}
+            <article class="evilbram-pm-history-item {{#if outgoing}}outgoing{{else}}incoming{{/if}}">
+              <div class="evilbram-pm-history-meta">
+                <strong>{{#if outgoing}}MJ{{else}}{{../selectedUser.label}}{{/if}}</strong>
+                <time>{{time}}</time>
+              </div>
+              <div class="evilbram-pm-history-content">{{{content}}}</div>
+            </article>
+          {{/each}}
+        {{else}}
+          <div class="evilbram-pm-thread-empty">
+            <i class="fa-regular fa-envelope"></i>
+            <p>Aucun échange de MP avec ce joueur pour le moment.</p>
+          </div>
+        {{/if}}
+      </div>
+
+      <footer class="evilbram-pm-composer">
+        <textarea
+          data-pm-draft
+          rows="4"
+          placeholder="Écrire un message privé…"
+        >{{draft}}</textarea>
+
+        <div class="evilbram-pm-send-options">
+          <button type="button" class="evilbram-pm-send evilbram-pm-send-classic" data-action="sendClassic">
+            <i class="fa-solid fa-paper-plane"></i>
+            Envoi classique
+          </button>
+          <button type="button" class="evilbram-pm-send evilbram-pm-send-popup" data-action="sendPopup">
+            <i class="fa-regular fa-window-restore"></i>
+            Envoi Popup
+          </button>
+        </div>
+      </footer>
+    {{else}}
+      <div class="evilbram-pm-thread-empty">
+        <i class="fa-regular fa-envelope"></i>
+        <p>Sélectionne un joueur pour afficher ses échanges.</p>
+      </div>
+    {{/if}}
+  </main>
+</section>

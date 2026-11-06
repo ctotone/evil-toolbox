@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.4.0
+
+- Visuels MJ : ajout du glisser-déposer d’images déjà intégrées dans des Journaux du world ;
+- prise en charge des pages de Journal de type Image ;
+- prise en charge des images HTML glissées depuis le contenu d’un Journal ;
+- les images des pages texte sont explicitement rendues draggables au rendu des feuilles Journal V1/V2 ;
+- capture renforcée du drag/drop pour les images HTML des pages texte (payload Toolbox + phase de capture) ;
+- normalisation des URLs locales du navigateur vers des chemins Foundry ;
+- zone de dépôt visuelle dans la fenêtre Visuels MJ ;
+- MP MJ : ajout d’un tableau de bord MJ pour les messages privés ;
+- envoi individuel ou multiple avec un ChatMessage distinct par joueur ;
+- modes Envoi classique et Popup + chat ;
+- bouton de réponse sous les MP reçus par les joueurs ;
+- popup de réponse joueur avec flou d’arrière-plan ;
+- popup joueur enrichie avec l’historique complet des échanges ;
+- notification compacte côté MJ uniquement lorsque le tableau de bord MP MJ est fermé ;
+- historique reconstruit depuis les ChatMessage privés natifs Foundry ;
+- Console MJ mise à jour avec un accès natif à MP MJ dans la section PROD ;
+- ajout de la macro autonome `PROD - Gestion MP` dans `EVILBRAM - Macros`.
+
 ## 1.3.0
 
 - intégration native de `Evilbram Lighting Toolkit` dans Evil Toolbox ;
@@ -8,8 +28,7 @@
 - conservation du schéma historique `evil-light-toolkit.ambient-light-preset` et des flags `evil-light-toolkit` ;
 - ajout de l’API `game.evilbramToolbox.lighting.open()` ;
 - maintien du bouton Lighting Toolkit dans les contrôles d’éclairage Foundry ;
-- mise à jour de la Console MJ générique avec accès natif à Lighting Toolkit et Visuels MJ ;
-- ajout de la macro `PROD - Visuels MJ` au compendium `EVILBRAM - Macros`.
+- préparation d’une Console MJ générique avec accès natif à Lighting Toolkit et Visuels MJ.
 
 ## 1.2.0
 

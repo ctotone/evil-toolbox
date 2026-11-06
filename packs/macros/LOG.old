@@ -1,5 +1,9 @@
-2026/11/04-10:16:38.436 35a0 Log #41: 0 ops saved to Table #42 OK
-2026/11/04-10:16:38.437 35a0 Archiving C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\macros/000041.log: OK
-2026/11/04-10:16:38.437 35a0 Table #38: 8 entries OK
-2026/11/04-10:16:38.439 35a0 Archiving C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\macros/MANIFEST-000039: OK
-2026/11/04-10:16:38.442 35a0 **** Repaired leveldb C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\macros; recovered 1 files; 22293 bytes. Some data may have been lost. ****
+2026/11/06-10:57:52.968 49c8 Recovering log #45
+2026/11/06-10:57:52.968 49c8 Recovering log #58
+2026/11/06-10:57:52.973 49c8 Delete type=0 #45
+2026/11/06-10:57:52.973 49c8 Delete type=0 #58
+2026/11/06-10:57:52.973 49c8 Delete type=3 #43
+2026/11/06-11:15:01.193 4540 Level-0 table #61: started
+2026/11/06-11:15:01.193 4540 Level-0 table #61: 0 bytes OK
+2026/11/06-11:15:01.196 4540 Delete type=0 #59
+2026/11/06-11:15:01.200 4540 Manual compaction at level-0 from '!macros!Dc9qysmn6xDbGIPZ' @ 72057594037927935 : 1 .. '!macros!zjm6sZoVCVCLBoa4' @ 0 : 0; will stop at (end)

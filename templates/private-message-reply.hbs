@@ -1,0 +1,32 @@
+<section class="evilbram-pm-reply-content">
+  <div class="evilbram-pm-player-history">
+    {{#if hasHistory}}
+      {{#each history}}
+        <article class="evilbram-pm-player-history-item {{#if fromGm}}from-gm{{else}}from-player{{/if}}">
+          <div class="evilbram-pm-player-history-meta">
+            <strong>{{#if fromGm}}MJ{{else}}Moi{{/if}}</strong>
+            <time>{{time}}</time>
+          </div>
+          <div class="evilbram-pm-player-history-body">{{{content}}}</div>
+        </article>
+      {{/each}}
+    {{else}}
+      <p class="evilbram-pm-player-history-empty">Aucun échange précédent.</p>
+    {{/if}}
+  </div>
+
+  <label class="evilbram-pm-reply-label" for="evilbram-pm-reply-text">Ta réponse</label>
+  <textarea
+    id="evilbram-pm-reply-text"
+    data-pm-reply-draft
+    rows="5"
+    placeholder="Écrire une réponse au MJ…"
+  >{{reply}}</textarea>
+
+  <div class="evilbram-pm-reply-actions">
+    <button type="button" data-action="sendReply">
+      <i class="fa-solid fa-paper-plane"></i>
+      Envoyer au MJ
+    </button>
+  </div>
+</section>

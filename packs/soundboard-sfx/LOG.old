@@ -1,5 +1,9 @@
-2026/11/04-10:16:38.411 1448 Log #46: 0 ops saved to Table #47 OK
-2026/11/04-10:16:38.412 1448 Archiving C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\soundboard-sfx/000046.log: OK
-2026/11/04-10:16:38.412 1448 Table #5: 59 entries OK
-2026/11/04-10:16:38.414 1448 Archiving C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\soundboard-sfx/MANIFEST-000044: OK
-2026/11/04-10:16:38.417 1448 **** Repaired leveldb C:\Users\PC\AppData\Local\FoundryVTT\Data\modules\evil-toolbox\packs\soundboard-sfx; recovered 1 files; 6828 bytes. Some data may have been lost. ****
+2026/11/06-10:57:52.956 4a58 Recovering log #50
+2026/11/06-10:57:52.956 4a58 Recovering log #63
+2026/11/06-10:57:52.961 4a58 Delete type=0 #50
+2026/11/06-10:57:52.962 4a58 Delete type=0 #63
+2026/11/06-10:57:52.962 4a58 Delete type=3 #48
+2026/11/06-11:15:01.190 4540 Level-0 table #66: started
+2026/11/06-11:15:01.190 4540 Level-0 table #66: 0 bytes OK
+2026/11/06-11:15:01.191 4540 Delete type=0 #64
+2026/11/06-11:15:01.193 4540 Manual compaction at level-0 from '!playlists!22GRsT8M8UoVc5CS' @ 72057594037927935 : 1 .. '!playlists.sounds!I0K2Af6SnlEmXQmx.zgFzYWIWwdmS4Pxa' @ 0 : 0; will stop at (end)

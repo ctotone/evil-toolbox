@@ -20,7 +20,6 @@ Macros incluses dans le compendium :
 - PROD - Lumière
 - PROD - Couper musique
 - PROD - Reset brouillard
-- PROD - Visuels MJ
 - FX - Météo
 - FX - Éclair
 - FX - Tic Tac
@@ -47,6 +46,7 @@ La fonctionnalité est active automatiquement lorsque Evilbram Toolbox est activ
 Evilbram Toolbox intègre une bibliothèque de visuels propre à chaque world.
 
 - ajout d'images via le File Picker Foundry ;
+- ajout possible par glisser-déposer d'une image déjà intégrée dans un Journal du world ;
 - classement alphabétique selon le nom défini par le MJ ;
 - galerie de vignettes scrollable côté MJ ;
 - bordure rouge pour un visuel jamais affiché ;
@@ -89,6 +89,24 @@ Evil Toolbox intègre nativement **Evilbram Lighting Toolkit** :
 
 Les formats historiques `evil-light-toolkit.ambient-light-preset` et les flags `evil-light-toolkit` sont conservés pour rester compatibles avec les presets et lumières existants.
 
+
+## MP MJ
+
+Evil Toolbox 1.4.0 ajoute un centre de messages privés MJ ↔ joueurs basé sur les whispers natifs de Foundry.
+
+- sélection d’un ou plusieurs joueurs connectés ;
+- un ChatMessage privé distinct est créé pour chaque destinataire ;
+- mode classique : message privé dans le chat ;
+- mode popup : message privé dans le chat + popup avec flou d’arrière-plan ;
+- bouton `Répondre au MJ` sous chaque MP Toolbox reçu ;
+- réponse joueur depuis une popup dédiée ;
+- popup joueur avec historique complet des échanges MJ ↔ joueur ;
+- notification compacte côté MJ uniquement si le tableau de bord MP MJ est fermé ;
+- accès direct au tableau de bord depuis la notification compacte ;
+- historique des échanges reconstruit depuis les ChatMessage Foundry ;
+- aucune base de messages parallèle dans les settings Toolbox ;
+- accès à MP MJ depuis la Console MJ et via la macro `PROD - Gestion MP`.
+
 ## Compatibilité
 
 - Foundry VTT minimum : v14
@@ -96,4 +114,4 @@ Les formats historiques `evil-light-toolkit.ambient-light-preset` et les flags `
 
 ## Statut
 
-Version 1.3.0 finalisée et validée sur Foundry VTT v14.
+Version 1.4.0 finalisée et validée sur Foundry VTT v14.

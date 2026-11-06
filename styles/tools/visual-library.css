@@ -262,3 +262,31 @@
   border-color: #2e7d32;
   box-shadow: inset 0 0 0 1px rgba(46, 125, 50, 0.35);
 }
+
+
+.evilbram-visual-drop-hint {
+  margin: -0.1rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.evilbram-visual-drop-hint i {
+  margin-right: 0.35rem;
+}
+
+.evilbram-visual-library-content.evilbram-drop-target {
+  outline: 2px dashed #3f88ff;
+  outline-offset: -8px;
+  background: rgba(63, 136, 255, 0.08);
+}
+
+
+/* Les images de contenu de Journal préparées par Toolbox deviennent
+   explicitement draggables vers Visuels MJ. */
+.evilbram-journal-visual-draggable {
+  cursor: grab;
+}
+
+.evilbram-journal-visual-draggable:active {
+  cursor: grabbing;
+}
