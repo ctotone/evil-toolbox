@@ -105,7 +105,8 @@ Evil Toolbox 1.4.0 ajoute un centre de messages privés MJ ↔ joueurs basé sur
 - accès direct au tableau de bord depuis la notification compacte ;
 - historique des échanges reconstruit depuis les ChatMessage Foundry ;
 - aucune base de messages parallèle dans les settings Toolbox ;
-- accès à MP MJ depuis la Console MJ et via la macro `PROD - Gestion MP`.
+- accès à MP MJ depuis la Console MJ et via la macro `PROD - Gestion MP`;
+- commandes de jet privées `/r` et `/roll` prises en charge dans les échanges MP.
 
 ## Compatibilité
 
@@ -114,4 +115,4 @@ Evil Toolbox 1.4.0 ajoute un centre de messages privés MJ ↔ joueurs basé sur
 
 ## Statut
 
-Version 1.4.0 finalisée et validée sur Foundry VTT v14.
+Candidate 1.4.1 : prise en charge des jets privés dans MP MJ.

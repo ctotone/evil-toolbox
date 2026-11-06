@@ -2,7 +2,7 @@
   "id": "evil-toolbox",
   "title": "Evilbram Toolbox",
   "description": "Boîte à outils transversale pour Foundry VTT : playlists, bruitages, macros MJ/joueur, visualisation des permissions, partage de visuels, outils d’éclairage et utilitaires réutilisables entre plusieurs mondes.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "authors": [
     {
       "name": "Evilbram",

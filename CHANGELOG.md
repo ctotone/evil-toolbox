@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.1
+- MP MJ : historique automatiquement positionné sur le dernier message à l’ouverture et au changement de conversation, côté MJ et joueur.
+- Correction du rendu des jets dans l’historique MP : résultat et détail visibles pour les participants du MP.
+
+- MP MJ : prise en charge des commandes de jet `/r` et `/roll` dans les champs de saisie MJ et joueur ;
+- les jets sont créés comme de vrais jets Foundry tout en conservant le whisper privé MP MJ ;
+- les résultats de jet sont affichés dans l’historique du tableau de bord MJ et dans la popup joueur ;
+- en envoi multiple, un jet distinct est effectué pour chaque joueur destinataire ;
+- aucun changement des compendiums.
+
 ## 1.4.0
 
 - Visuels MJ : ajout du glisser-déposer d’images déjà intégrées dans des Journaux du world ;

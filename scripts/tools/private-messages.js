@@ -27,6 +27,100 @@ function textToChatHtml(value) {
   return `<div class="evilbram-pm-message-text">${escapeHtmlPm(value).replace(/\r?\n/g, "<br>")}</div>`;
 }
 
+function parsePmRollCommand(value) {
+  const clean = String(value ?? "").trim();
+  const match = clean.match(/^\/(?:r|roll)\s+([\s\S]+)$/i);
+  if (!match) return null;
+
+  const body = String(match[1] ?? "").trim();
+  const hashIndex = body.indexOf("#");
+  const formula = (hashIndex >= 0 ? body.slice(0, hashIndex) : body).trim();
+  const flavor = (hashIndex >= 0 ? body.slice(hashIndex + 1) : "").trim();
+
+  if (!formula) throw new Error("Indique une formule de jet après /r ou /roll.");
+
+  const RollClass = foundry?.dice?.Roll;
+  if (!RollClass?.validate?.(formula)) {
+    throw new Error(`Formule de jet invalide : ${formula}`);
+  }
+
+  return { formula, flavor };
+}
+
+async function createPmChatMessage({ userId, speaker, whisper, text, flagData }) {
+  const cleanText = String(text ?? "").trim();
+  if (!cleanText) return null;
+
+  const flags = {
+    [EVILBRAM_PM_MODULE_ID]: {
+      [EVILBRAM_PM_FLAG_KEY]: flagData
+    }
+  };
+
+  const rollCommand = parsePmRollCommand(cleanText);
+  if (!rollCommand) {
+    return ChatMessage.create({
+      user: userId,
+      speaker,
+      content: textToChatHtml(cleanText),
+      whisper,
+      flags
+    });
+  }
+
+  const roll = new foundry.dice.Roll(rollCommand.formula);
+  await roll.evaluate();
+
+  const prepared = await roll.toMessage(
+    {
+      user: userId,
+      speaker,
+      flavor: rollCommand.flavor || undefined,
+      flags
+    },
+    { create: false }
+  );
+
+  prepared.user = userId;
+  prepared.speaker = speaker;
+  prepared.whisper = [...whisper];
+  prepared.blind = false;
+  prepared.flags = flags;
+
+  return ChatMessage.create(prepared);
+}
+
+function scrollPmHistoryToBottom(container) {
+  if (!container) return;
+
+  const scroll = () => {
+    container.scrollTop = container.scrollHeight;
+  };
+
+  // Premier positionnement immédiat, puis après stabilisation du layout.
+  scroll();
+  requestAnimationFrame(() => {
+    scroll();
+    requestAnimationFrame(scroll);
+  });
+  setTimeout(scroll, 100);
+}
+
+async function renderPmHistoryContent(message) {
+  if (!message?.isRoll || !Array.isArray(message.rolls) || !message.rolls.length) {
+    return message?.content ?? "";
+  }
+
+  const rendered = [];
+  for (const roll of message.rolls) {
+    rendered.push(await roll.render({
+      flavor: message.flavor || undefined,
+      isPrivate: false
+    }));
+  }
+  return rendered.join("");
+}
+
 function getPmFlag(message) {
   return message?.getFlag?.(EVILBRAM_PM_MODULE_ID, EVILBRAM_PM_FLAG_KEY) ?? null;
 }
@@ -82,25 +176,19 @@ async function createPrivateMessage({ playerUserId, text, popup = false, inReply
   if (!cleanText) return null;
 
   const gmUserId = game.user.id;
-  const message = await ChatMessage.create({
-    user: gmUserId,
+  return createPmChatMessage({
+    userId: gmUserId,
     speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
-    content: textToChatHtml(cleanText),
     whisper: [playerUserId],
-    flags: {
-      [EVILBRAM_PM_MODULE_ID]: {
-        [EVILBRAM_PM_FLAG_KEY]: {
-          direction: "gm-to-player",
-          gmUserId,
-          playerUserId,
-          popup: popup === true,
-          inReplyTo
-        }
-      }
+    text: cleanText,
+    flagData: {
+      direction: "gm-to-player",
+      gmUserId,
+      playerUserId,
+      popup: popup === true,
+      inReplyTo
     }
   });
-
-  return message;
 }
 
 async function createPlayerReply({ sourceMessage, text }) {
@@ -117,21 +205,17 @@ async function createPlayerReply({ sourceMessage, text }) {
   const cleanText = String(text ?? "").trim();
   if (!cleanText) return null;
 
-  return ChatMessage.create({
-    user: game.user.id,
+  return createPmChatMessage({
+    userId: game.user.id,
     speaker: ChatMessage.getSpeaker({ alias: game.user.character?.name || game.user.name }),
-    content: textToChatHtml(cleanText),
     whisper: [sourceFlag.gmUserId],
-    flags: {
-      [EVILBRAM_PM_MODULE_ID]: {
-        [EVILBRAM_PM_FLAG_KEY]: {
-          direction: "player-to-gm",
-          gmUserId: sourceFlag.gmUserId,
-          playerUserId: game.user.id,
-          popup: false,
-          inReplyTo: sourceMessage.id
-        }
-      }
+    text: cleanText,
+    flagData: {
+      direction: "player-to-gm",
+      gmUserId: sourceFlag.gmUserId,
+      playerUserId: game.user.id,
+      popup: false,
+      inReplyTo: sourceMessage.id
     }
   });
 }
@@ -212,16 +296,16 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
 
     const selectedUser = game.users.get(this.selectedThreadUserId);
     const history = selectedUser
-      ? getConversationMessages(selectedUser.id).map(message => {
+      ? await Promise.all(getConversationMessages(selectedUser.id).map(async message => {
           const flag = getPmFlag(message);
           return {
             id: message.id,
             outgoing: flag?.direction === "gm-to-player",
             incoming: flag?.direction === "player-to-gm",
-            content: message.content,
+            content: await renderPmHistoryContent(message),
             time: formatMessageTime(message.timestamp)
           };
-        })
+        }))
       : [];
 
     return {
@@ -254,7 +338,7 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
 
 
     const history = this.element.querySelector(".evilbram-pm-history");
-    if (history) history.scrollTop = history.scrollHeight;
+    scrollPmHistoryToBottom(history);
   }
 
   static async #onSelectConversation(event, target) {
@@ -374,16 +458,16 @@ class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationM
     const context = await super._prepareContext(options);
     const flag = getPmFlag(this.message);
     const history = flag?.gmUserId
-      ? getConversationMessages(game.user.id, flag.gmUserId).map(message => {
+      ? await Promise.all(getConversationMessages(game.user.id, flag.gmUserId).map(async message => {
           const messageFlag = getPmFlag(message);
           return {
             id: message.id,
             fromGm: messageFlag?.direction === "gm-to-player",
             fromPlayer: messageFlag?.direction === "player-to-gm",
-            content: message.content,
+            content: await renderPmHistoryContent(message),
             time: formatMessageTime(message.timestamp)
           };
-        })
+        }))
       : [];
 
     return {
@@ -406,7 +490,7 @@ class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationM
     textarea?.focus();
 
     const history = this.element.querySelector(".evilbram-pm-player-history");
-    if (history) history.scrollTop = history.scrollHeight;
+    scrollPmHistoryToBottom(history);
   }
 
   static async #onSendReply() {
