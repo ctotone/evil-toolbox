@@ -2,6 +2,7 @@
 
 ## 1.4.2
 
+- correction de l’organisation du compendium `EVILBRAM - Playlists JDR` depuis le world Foundry de production ;
 - mise à jour du compendium `EVILBRAM - Playlists JDR` depuis le world Foundry de production ;
 - mise à jour du compendium `EVILBRAM - Bruitages & FX` depuis le world Foundry de production ;
 - aucun changement fonctionnel du code du module ;
