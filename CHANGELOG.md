@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.2
+
+- mise à jour du compendium `EVILBRAM - Playlists JDR` depuis le world Foundry de production ;
+- mise à jour du compendium `EVILBRAM - Bruitages & FX` depuis le world Foundry de production ;
+- aucun changement fonctionnel du code du module ;
+- compendium `EVILBRAM - Macros` conservé sans modification.
+
 ## 1.4.1
 - MP MJ : historique automatiquement positionné sur le dernier message à l’ouverture et au changement de conversation, côté MJ et joueur.
 - Correction du rendu des jets dans l’historique MP : résultat et détail visibles pour les participants du MP.
