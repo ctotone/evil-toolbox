@@ -398,3 +398,88 @@
     border-bottom: 1px solid var(--color-border-light-2, #666);
   }
 }
+
+/* --- Accès Messages privés dans le répertoire Actors --- */
+.evilbram-pm-directory-launcher {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.45rem 0.45rem;
+}
+
+.evilbram-pm-directory-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto !important;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: 2048 / 543;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background-color: transparent;
+  background-image: url("../../assets/private-messages-button.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.evilbram-pm-directory-button:hover,
+.evilbram-pm-directory-button:focus-visible {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+.evilbram-pm-directory-button-label {
+  position: relative;
+  z-index: 1;
+  color: #f3ead3;
+  font-size: 1rem;
+  font-weight: 700;
+  padding-left: 65px;
+  letter-spacing: 0.035em;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.evilbram-pm-permission-warning {
+  margin: 0 0 0.55rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid rgba(190, 120, 55, 0.55);
+  border-radius: 5px;
+  background: rgba(170, 95, 35, 0.12);
+  font-size: 0.8rem;
+}
+
+.evilbram-pm-popup-peer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--color-border-light-2, #666);
+}
+
+.evilbram-pm-popup-peer img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 0;
+  object-fit: cover;
+}
+
+.evilbram-pm-popup-peer > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.evilbram-pm-popup-peer small {
+  opacity: 0.65;
+}

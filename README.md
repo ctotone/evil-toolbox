@@ -90,23 +90,23 @@ Evil Toolbox intègre nativement **Evilbram Lighting Toolkit** :
 Les formats historiques `evil-light-toolkit.ambient-light-preset` et les flags `evil-light-toolkit` sont conservés pour rester compatibles avec les presets et lumières existants.
 
 
-## MP MJ
+## Messages privés
 
-Evil Toolbox 1.4.0 ajoute un centre de messages privés MJ ↔ joueurs basé sur les whispers natifs de Foundry.
+Evil Toolbox 1.5.0 généralise l'ancien centre `MP MJ` en messagerie privée accessible aux MJ et aux joueurs.
 
-- sélection d’un ou plusieurs joueurs connectés ;
+- conversations MJ ↔ joueurs et joueur ↔ joueur ;
+- sélection d’un ou plusieurs contacts connectés ;
 - un ChatMessage privé distinct est créé pour chaque destinataire ;
 - mode classique : message privé dans le chat ;
 - mode popup : message privé dans le chat + popup avec flou d’arrière-plan ;
-- bouton `Répondre au MJ` sous chaque MP Toolbox reçu ;
-- réponse joueur depuis une popup dédiée ;
-- popup joueur avec historique complet des échanges MJ ↔ joueur ;
-- notification compacte côté MJ uniquement si le tableau de bord MP MJ est fermé ;
-- accès direct au tableau de bord depuis la notification compacte ;
-- historique des échanges reconstruit depuis les ChatMessage Foundry ;
-- aucune base de messages parallèle dans les settings Toolbox ;
-- accès à MP MJ depuis la Console MJ et via la macro `PROD - Gestion MP`;
-- commandes de jet privées `/r` et `/roll` prises en charge dans les échanges MP.
+- bouton `Répondre` sous chaque MP Toolbox reçu ;
+- popup de réponse avec historique complet de la conversation ;
+- notification compacte côté MJ pour un MP classique entrant lorsque le tableau de bord est fermé ;
+- historique reconstruit depuis les ChatMessage whispers natifs Foundry ;
+- compatibilité avec les anciens échanges `MP MJ` des versions 1.4.x ;
+- commandes de jet privées `/r` et `/roll` prises en charge ;
+- accès via `game.evilbramToolbox.privateMessages.open()` ;
+- bouton `Messages privés` dans le répertoire Actors pour tous les utilisateurs.
 
 ## Compatibilité
 
@@ -115,4 +115,4 @@ Evil Toolbox 1.4.0 ajoute un centre de messages privés MJ ↔ joueurs basé sur
 
 ## Statut
 
-Candidate 1.4.1 : prise en charge des jets privés dans MP MJ.
+Candidate 1.5.0 : généralisation de la messagerie privée aux MJ et joueurs.

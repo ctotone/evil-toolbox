@@ -1,13 +1,13 @@
 <section class="evilbram-pm-dashboard-content">
   <aside class="evilbram-pm-sidebar">
     <header>
-      <strong>Joueurs</strong>
+      <strong>Contacts</strong>
       <span>Destinataires du prochain envoi</span>
     </header>
 
-    {{#if hasPlayers}}
+    {{#if hasContacts}}
       <div class="evilbram-pm-player-list">
-        {{#each players}}
+        {{#each contacts}}
           <div class="evilbram-pm-player {{#if selectedThread}}selected{{/if}}">
             <label class="evilbram-pm-recipient-check" title="Inclure dans le prochain envoi">
               <input
@@ -29,8 +29,9 @@
               <span class="evilbram-pm-player-text">
                 <strong>{{label}}</strong>
                 <small>
-                  {{#if characterName}}{{userName}} · {{/if}}
-                  {{#if active}}connecté{{else}}hors ligne{{/if}}
+                  {{roleLabel}}
+                  {{#if characterName}} · {{userName}}{{/if}}
+                  · {{#if active}}connecté{{else}}hors ligne{{/if}}
                 </small>
               </span>
               {{#if unread}}<span class="evilbram-pm-unread">{{unread}}</span>{{/if}}
@@ -39,7 +40,7 @@
         {{/each}}
       </div>
     {{else}}
-      <p class="evilbram-pm-empty">Aucun joueur disponible.</p>
+      <p class="evilbram-pm-empty">Aucun autre utilisateur disponible.</p>
     {{/if}}
   </aside>
 
@@ -49,7 +50,10 @@
         <img src="{{selectedUser.img}}" alt="">
         <div>
           <strong>{{selectedUser.label}}</strong>
-          {{#if selectedUser.characterName}}<small>{{selectedUser.userName}}</small>{{/if}}
+          <small>
+            {{selectedUser.roleLabel}}
+            {{#if selectedUser.characterName}} · {{selectedUser.userName}}{{/if}}
+          </small>
         </div>
       </header>
 
@@ -58,7 +62,7 @@
           {{#each history}}
             <article class="evilbram-pm-history-item {{#if outgoing}}outgoing{{else}}incoming{{/if}}">
               <div class="evilbram-pm-history-meta">
-                <strong>{{#if outgoing}}MJ{{else}}{{../selectedUser.label}}{{/if}}</strong>
+                <strong>{{#if outgoing}}Moi{{else}}{{../selectedUser.label}}{{/if}}</strong>
                 <time>{{time}}</time>
               </div>
               <div class="evilbram-pm-history-content">{{{content}}}</div>
@@ -67,24 +71,31 @@
         {{else}}
           <div class="evilbram-pm-thread-empty">
             <i class="fa-regular fa-envelope"></i>
-            <p>Aucun échange de MP avec ce joueur pour le moment.</p>
+            <p>Aucun échange de MP avec ce contact pour le moment.</p>
           </div>
         {{/if}}
       </div>
 
       <footer class="evilbram-pm-composer">
+        {{#unless canWhisper}}
+          <p class="evilbram-pm-permission-warning">
+            Tu n'as pas l'autorisation Foundry d'envoyer des messages privés dans ce world.
+          </p>
+        {{/unless}}
+
         <textarea
           data-pm-draft
           rows="4"
           placeholder="Écrire un message privé…"
+          {{#unless canWhisper}}disabled{{/unless}}
         >{{draft}}</textarea>
 
         <div class="evilbram-pm-send-options">
-          <button type="button" class="evilbram-pm-send evilbram-pm-send-classic" data-action="sendClassic">
+          <button type="button" class="evilbram-pm-send evilbram-pm-send-classic" data-action="sendClassic" {{#unless canWhisper}}disabled{{/unless}}>
             <i class="fa-solid fa-paper-plane"></i>
             Envoi classique
           </button>
-          <button type="button" class="evilbram-pm-send evilbram-pm-send-popup" data-action="sendPopup">
+          <button type="button" class="evilbram-pm-send evilbram-pm-send-popup" data-action="sendPopup" {{#unless canWhisper}}disabled{{/unless}}>
             <i class="fa-regular fa-window-restore"></i>
             Envoi Popup
           </button>
@@ -93,7 +104,7 @@
     {{else}}
       <div class="evilbram-pm-thread-empty">
         <i class="fa-regular fa-envelope"></i>
-        <p>Sélectionne un joueur pour afficher ses échanges.</p>
+        <p>Sélectionne un contact pour afficher ses échanges.</p>
       </div>
     {{/if}}
   </main>

@@ -1,8 +1,9 @@
 /*
- * Evilbram Toolbox — MP MJ
+ * Evilbram Toolbox — Messages privés
  * Foundry VTT v14
  *
- * Centre de messages privés MJ ↔ joueurs basé sur les ChatMessage whisper natifs.
+ * Messagerie privée entre utilisateurs basée sur les ChatMessage whisper natifs.
+ * Compatible avec les anciens échanges MP MJ des versions 1.4.x.
  */
 
 const EVILBRAM_PM_MODULE_ID = "evil-toolbox";
@@ -97,7 +98,6 @@ function scrollPmHistoryToBottom(container) {
     container.scrollTop = container.scrollHeight;
   };
 
-  // Premier positionnement immédiat, puis après stabilisation du layout.
   scroll();
   requestAnimationFrame(() => {
     scroll();
@@ -125,11 +125,76 @@ function getPmFlag(message) {
   return message?.getFlag?.(EVILBRAM_PM_MODULE_ID, EVILBRAM_PM_FLAG_KEY) ?? null;
 }
 
-function getNonGmUsers() {
+/**
+ * Convertit les flags 1.4.x et 1.5.x vers un même couple expéditeur/destinataire.
+ */
+function getPmParticipants(message) {
+  const flag = getPmFlag(message);
+  if (!flag) return null;
+
+  if (flag.senderUserId && flag.recipientUserId) {
+    return {
+      senderUserId: flag.senderUserId,
+      recipientUserId: flag.recipientUserId,
+      flag
+    };
+  }
+
+  if (flag.direction === "gm-to-player" && flag.gmUserId && flag.playerUserId) {
+    return {
+      senderUserId: flag.gmUserId,
+      recipientUserId: flag.playerUserId,
+      flag
+    };
+  }
+
+  if (flag.direction === "player-to-gm" && flag.gmUserId && flag.playerUserId) {
+    return {
+      senderUserId: flag.playerUserId,
+      recipientUserId: flag.gmUserId,
+      flag
+    };
+  }
+
+  return null;
+}
+
+function buildPmFlagData({ senderUserId, recipientUserId, popup = false, inReplyTo = null }) {
+  const sender = game.users.get(senderUserId);
+  const recipient = game.users.get(recipientUserId);
+
+  let direction = "user-to-user";
+  const legacy = {};
+
+  if (sender?.isGM && recipient && !recipient.isGM) {
+    direction = "gm-to-player";
+    legacy.gmUserId = senderUserId;
+    legacy.playerUserId = recipientUserId;
+  } else if (sender && !sender.isGM && recipient?.isGM) {
+    direction = "player-to-gm";
+    legacy.gmUserId = recipientUserId;
+    legacy.playerUserId = senderUserId;
+  } else if (sender && !sender.isGM && recipient && !recipient.isGM) {
+    direction = "player-to-player";
+  }
+
+  return {
+    version: 2,
+    direction,
+    senderUserId,
+    recipientUserId,
+    popup: popup === true,
+    inReplyTo,
+    ...legacy
+  };
+}
+
+function getAvailableContacts() {
   return game.users
-    .filter(user => !user.isGM)
+    .filter(user => user.id !== game.user.id)
     .sort((a, b) => {
       if (a.active !== b.active) return a.active ? -1 : 1;
+      if (a.isGM !== b.isGM) return a.isGM ? -1 : 1;
       const aName = a.character?.name || a.name;
       const bName = b.character?.name || b.name;
       return String(aName).localeCompare(String(bName), "fr", { sensitivity: "base" });
@@ -142,16 +207,24 @@ function getUserDisplay(user) {
     userName: user.name,
     characterName: user.character?.name ?? "",
     label: user.character?.name || user.name,
+    roleLabel: user.isGM ? "MJ" : "Joueur",
+    isGM: user.isGM === true,
     active: user.active === true,
     img: user.character?.img || user.avatar || "icons/svg/mystery-man.svg"
   };
 }
 
-function getConversationMessages(playerUserId, gmUserId = game.user.id) {
+function getConversationMessages(peerUserId, currentUserId = game.user.id) {
   return game.messages.contents
     .filter(message => {
-      const flag = getPmFlag(message);
-      return flag?.gmUserId === gmUserId && flag?.playerUserId === playerUserId;
+      const participants = getPmParticipants(message);
+      if (!participants) return false;
+
+      const { senderUserId, recipientUserId } = participants;
+      return (
+        (senderUserId === currentUserId && recipientUserId === peerUserId) ||
+        (senderUserId === peerUserId && recipientUserId === currentUserId)
+      );
     })
     .sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0));
 }
@@ -168,68 +241,50 @@ function formatMessageTime(timestamp) {
   }
 }
 
-async function createPrivateMessage({ playerUserId, text, popup = false, inReplyTo = null }) {
-  const player = game.users.get(playerUserId);
-  if (!player || player.isGM) throw new Error("Joueur destinataire introuvable.");
-
-  const cleanText = String(text ?? "").trim();
-  if (!cleanText) return null;
-
-  const gmUserId = game.user.id;
-  return createPmChatMessage({
-    userId: gmUserId,
-    speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
-    whisper: [playerUserId],
-    text: cleanText,
-    flagData: {
-      direction: "gm-to-player",
-      gmUserId,
-      playerUserId,
-      popup: popup === true,
-      inReplyTo
-    }
-  });
+function canCurrentUserWhisper() {
+  return game.user.isGM || game.user.can("MESSAGE_WHISPER");
 }
 
-async function createPlayerReply({ sourceMessage, text }) {
-  if (game.user.isGM) return null;
-
-  if (!game.user.can("MESSAGE_WHISPER")) {
-    ui.notifications.warn("Tu n'as pas l'autorisation d'envoyer des messages privés dans ce world.");
-    return null;
+async function createPrivateMessage({ recipientUserId, text, popup = false, inReplyTo = null }) {
+  const recipient = game.users.get(recipientUserId);
+  if (!recipient || recipient.id === game.user.id) {
+    throw new Error("Destinataire introuvable.");
   }
 
-  const sourceFlag = getPmFlag(sourceMessage);
-  if (!sourceFlag?.gmUserId || sourceFlag.playerUserId !== game.user.id) return null;
+  if (!canCurrentUserWhisper()) {
+    throw new Error("Tu n'as pas l'autorisation d'envoyer des messages privés dans ce world.");
+  }
 
   const cleanText = String(text ?? "").trim();
   if (!cleanText) return null;
 
+  const senderUserId = game.user.id;
   return createPmChatMessage({
-    userId: game.user.id,
+    userId: senderUserId,
     speaker: ChatMessage.getSpeaker({ alias: game.user.character?.name || game.user.name }),
-    whisper: [sourceFlag.gmUserId],
+    // Les deux participants sont explicitement destinataires du whisper.
+    // Ainsi chacun conserve l'accès au message dans le chat et l'historique Toolbox.
+    whisper: [senderUserId, recipientUserId],
     text: cleanText,
-    flagData: {
-      direction: "player-to-gm",
-      gmUserId: sourceFlag.gmUserId,
-      playerUserId: game.user.id,
-      popup: false,
-      inReplyTo: sourceMessage.id
-    }
+    flagData: buildPmFlagData({
+      senderUserId,
+      recipientUserId,
+      popup,
+      inReplyTo
+    })
   });
 }
 
-async function openPmDashboard({ playerUserId = null } = {}) {
-  if (!game.user.isGM) return;
+async function openPmDashboard({ userId = null, playerUserId = null } = {}) {
+  const requestedUserId = userId || playerUserId || null;
 
   if (evilbramPmDashboardApp?.rendered) {
-    if (playerUserId) evilbramPmDashboardApp.selectConversation(playerUserId);
+    if (requestedUserId) evilbramPmDashboardApp.selectConversation(requestedUserId);
     evilbramPmDashboardApp.bringToFront();
     return;
   }
 
-  evilbramPmDashboardApp = new EvilbramPmDashboardApp({ playerUserId });
+  evilbramPmDashboardApp = new EvilbramPmDashboardApp({ userId: requestedUserId });
   const app = evilbramPmDashboardApp;
   app.addEventListener("close", () => {
     if (evilbramPmDashboardApp === app) evilbramPmDashboardApp = null;
@@ -240,10 +295,11 @@ async function openPmDashboard({ playerUserId = null } = {}) {
 class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
 ) {
-  constructor({ playerUserId = null } = {}) {
+  constructor({ userId = null } = {}) {
     super();
-    const firstActive = getNonGmUsers().find(user => user.active) ?? getNonGmUsers()[0] ?? null;
-    this.selectedThreadUserId = playerUserId || firstActive?.id || null;
+    const contacts = getAvailableContacts();
+    const firstActive = contacts.find(user => user.active) ?? contacts[0] ?? null;
+    this.selectedThreadUserId = userId || firstActive?.id || null;
     this.selectedRecipients = new Set(this.selectedThreadUserId ? [this.selectedThreadUserId] : []);
     this.draft = "";
   }
@@ -256,7 +312,7 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
       height: 640
     },
     window: {
-      title: "MP MJ",
+      title: "Messages privés",
       icon: "fa-solid fa-envelope",
       resizable: true
     },
@@ -274,7 +330,7 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
   };
 
   selectConversation(userId) {
-    if (!userId) return;
+    if (!userId || userId === game.user.id) return;
     this.selectedThreadUserId = userId;
     evilbramPmUnreadByUser.delete(userId);
     this.render();
@@ -282,9 +338,9 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const users = getNonGmUsers();
+    const users = getAvailableContacts();
 
-    const players = users.map(user => {
+    const contacts = users.map(user => {
       const display = getUserDisplay(user);
       return {
         ...display,
@@ -297,11 +353,12 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
     const selectedUser = game.users.get(this.selectedThreadUserId);
     const history = selectedUser
       ? await Promise.all(getConversationMessages(selectedUser.id).map(async message => {
-          const flag = getPmFlag(message);
+          const participants = getPmParticipants(message);
+          const outgoing = participants?.senderUserId === game.user.id;
           return {
             id: message.id,
-            outgoing: flag?.direction === "gm-to-player",
-            incoming: flag?.direction === "player-to-gm",
+            outgoing,
+            incoming: !outgoing,
             content: await renderPmHistoryContent(message),
             time: formatMessageTime(message.timestamp)
           };
@@ -310,12 +367,13 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
 
     return {
       ...context,
-      players,
-      hasPlayers: players.length > 0,
+      contacts,
+      hasContacts: contacts.length > 0,
       selectedUser: selectedUser ? getUserDisplay(selectedUser) : null,
       history,
       hasHistory: history.length > 0,
-      draft: this.draft
+      draft: this.draft,
+      canWhisper: canCurrentUserWhisper()
     };
   }
 
@@ -336,7 +394,6 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
       this.draft = event.currentTarget.value;
     });
 
-
     const history = this.element.querySelector(".evilbram-pm-history");
     scrollPmHistoryToBottom(history);
   }
@@ -356,26 +413,34 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
       return;
     }
 
+    if (!canCurrentUserWhisper()) {
+      ui.notifications.warn("Tu n'as pas l'autorisation d'envoyer des messages privés dans ce world.");
+      return;
+    }
+
     const recipientIds = [...this.selectedRecipients]
-      .filter(id => game.users.get(id)?.active && !game.users.get(id)?.isGM);
+      .filter(id => {
+        const user = game.users.get(id);
+        return user?.active && user.id !== game.user.id;
+      });
 
     if (!recipientIds.length) {
-      ui.notifications.warn("Sélectionne au moins un joueur connecté.");
+      ui.notifications.warn("Sélectionne au moins un destinataire connecté.");
       return;
     }
 
     try {
-      for (const playerUserId of recipientIds) {
-        await createPrivateMessage({ playerUserId, text, popup });
+      for (const recipientUserId of recipientIds) {
+        await createPrivateMessage({ recipientUserId, text, popup });
       }
 
       const count = recipientIds.length;
-      ui.notifications.info(`MP envoyé${count > 1 ? "s" : ""} à ${count} joueur${count > 1 ? "s" : ""}.`);
+      ui.notifications.info(`Message privé envoyé${count > 1 ? "s" : ""} à ${count} destinataire${count > 1 ? "s" : ""}.`);
       this.draft = "";
       await this.render();
     } catch (err) {
-      console.error("Evil Toolbox | MP MJ | Envoi impossible", err);
-      ui.notifications.error(err?.message ?? "Impossible d'envoyer le MP.");
+      console.error("Evil Toolbox | Messages privés | Envoi impossible", err);
+      ui.notifications.error(err?.message ?? "Impossible d'envoyer le message privé.");
     }
   }
 
@@ -405,15 +470,16 @@ function ensurePmReplyBackdrop(app) {
   evilbramPmReplyBackdrop = backdrop;
 }
 
-async function openPlayerReplyPopup(message) {
-  if (game.user.isGM) return;
+async function openPmReplyPopup(message) {
+  const participants = getPmParticipants(message);
+  if (!participants || participants.recipientUserId !== game.user.id) return;
 
-  const flag = getPmFlag(message);
-  if (flag?.direction !== "gm-to-player" || flag.playerUserId !== game.user.id) return;
+  const peerUserId = participants.senderUserId;
+  if (!peerUserId || peerUserId === game.user.id) return;
 
   if (evilbramPmReplyApp?.rendered) await evilbramPmReplyApp.close();
 
-  evilbramPmReplyApp = new EvilbramPmReplyApp(message);
+  evilbramPmReplyApp = new EvilbramPmReplyApp(message, peerUserId);
   const app = evilbramPmReplyApp;
   app.addEventListener("close", () => {
     removePmReplyBackdrop();
@@ -425,9 +491,10 @@ async function openPlayerReplyPopup(message) {
 class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
 ) {
-  constructor(message) {
+  constructor(message, peerUserId) {
     super();
     this.message = message;
+    this.peerUserId = peerUserId;
     this.reply = "";
   }
 
@@ -456,14 +523,15 @@ class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationM
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const flag = getPmFlag(this.message);
-    const history = flag?.gmUserId
-      ? await Promise.all(getConversationMessages(game.user.id, flag.gmUserId).map(async message => {
-          const messageFlag = getPmFlag(message);
+    const peer = game.users.get(this.peerUserId);
+    const history = peer
+      ? await Promise.all(getConversationMessages(peer.id).map(async message => {
+          const participants = getPmParticipants(message);
+          const fromMe = participants?.senderUserId === game.user.id;
           return {
             id: message.id,
-            fromGm: messageFlag?.direction === "gm-to-player",
-            fromPlayer: messageFlag?.direction === "player-to-gm",
+            fromMe,
+            fromPeer: !fromMe,
             content: await renderPmHistoryContent(message),
             time: formatMessageTime(message.timestamp)
           };
@@ -472,6 +540,7 @@ class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationM
 
     return {
       ...context,
+      peer: peer ? getUserDisplay(peer) : null,
       history,
       hasHistory: history.length > 0,
       reply: this.reply
@@ -501,31 +570,36 @@ class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationM
     }
 
     try {
-      const created = await createPlayerReply({ sourceMessage: this.message, text });
+      const created = await createPrivateMessage({
+        recipientUserId: this.peerUserId,
+        text,
+        popup: false,
+        inReplyTo: this.message?.id ?? null
+      });
       if (!created) return;
-      ui.notifications.info("Réponse envoyée au MJ.");
+      ui.notifications.info("Message privé envoyé.");
       await this.close();
     } catch (err) {
-      console.error("Evil Toolbox | MP MJ | Réponse impossible", err);
+      console.error("Evil Toolbox | Messages privés | Réponse impossible", err);
       ui.notifications.error(err?.message ?? "Impossible d'envoyer la réponse.");
     }
   }
 }
 
-async function showGmReplyNotification(message) {
+async function showGmIncomingNotification(message) {
   if (!game.user.isGM) return;
 
-  const flag = getPmFlag(message);
-  if (flag?.direction !== "player-to-gm" || flag.gmUserId !== game.user.id) return;
+  const participants = getPmParticipants(message);
+  if (!participants || participants.recipientUserId !== game.user.id) return;
 
-  const player = game.users.get(flag.playerUserId);
-  if (!player) return;
+  const sender = game.users.get(participants.senderUserId);
+  if (!sender) return;
 
   if (evilbramPmNotificationApp?.rendered) await evilbramPmNotificationApp.close();
 
   evilbramPmNotificationApp = new EvilbramPmNotificationApp({
-    playerUserId: player.id,
-    playerLabel: player.character?.name || player.name
+    senderUserId: sender.id,
+    senderLabel: sender.character?.name || sender.name
   });
 
   const app = evilbramPmNotificationApp;
@@ -538,10 +612,10 @@ async function showGmReplyNotification(message) {
 class EvilbramPmNotificationApp extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
 ) {
-  constructor({ playerUserId, playerLabel }) {
+  constructor({ senderUserId, senderLabel }) {
     super();
-    this.playerUserId = playerUserId;
-    this.playerLabel = playerLabel;
+    this.senderUserId = senderUserId;
+    this.senderLabel = senderLabel;
   }
 
   static DEFAULT_OPTIONS = {
@@ -571,7 +645,7 @@ class EvilbramPmNotificationApp extends foundry.applications.api.HandlebarsAppli
     const context = await super._prepareContext(options);
     return {
       ...context,
-      playerLabel: this.playerLabel
+      senderLabel: this.senderLabel
     };
   }
 
@@ -580,17 +654,15 @@ class EvilbramPmNotificationApp extends foundry.applications.api.HandlebarsAppli
   }
 
   static async #onOpenDashboard() {
-    const playerUserId = this.playerUserId;
+    const userId = this.senderUserId;
     await this.close();
-    await openPmDashboard({ playerUserId });
+    await openPmDashboard({ userId });
   }
 }
 
 function addReplyButtonToChatMessage(message, html) {
-  if (game.user.isGM) return;
-
-  const flag = getPmFlag(message);
-  if (flag?.direction !== "gm-to-player" || flag.playerUserId !== game.user.id) return;
+  const participants = getPmParticipants(message);
+  if (!participants || participants.recipientUserId !== game.user.id) return;
 
   const root = html instanceof HTMLElement ? html : html?.[0];
   if (!(root instanceof HTMLElement)) return;
@@ -603,11 +675,11 @@ function addReplyButtonToChatMessage(message, html) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "evilbram-pm-chat-reply";
-  button.innerHTML = '<i class="fa-solid fa-reply"></i> Répondre au MJ';
+  button.innerHTML = '<i class="fa-solid fa-reply"></i> Répondre';
   button.addEventListener("click", event => {
     event.preventDefault();
     event.stopPropagation();
-    openPlayerReplyPopup(message);
+    openPmReplyPopup(message);
   });
 
   actions.append(button);
@@ -615,33 +687,68 @@ function addReplyButtonToChatMessage(message, html) {
 }
 
 async function handleCreatedPmMessage(message) {
-  const flag = getPmFlag(message);
-  if (!flag) return;
+  const participants = getPmParticipants(message);
+  if (!participants || participants.recipientUserId !== game.user.id || !message.visible) return;
 
-  if (!game.user.isGM) {
-    if (
-      flag.direction === "gm-to-player" &&
-      flag.playerUserId === game.user.id &&
-      flag.popup === true &&
-      message.visible
-    ) {
-      await openPlayerReplyPopup(message);
-    }
+  const peerUserId = participants.senderUserId;
+  const flag = participants.flag;
+
+  const dashboardOpen = evilbramPmDashboardApp?.rendered === true;
+  const viewingPeer = dashboardOpen && evilbramPmDashboardApp.selectedThreadUserId === peerUserId;
+
+  if (!viewingPeer) {
+    evilbramPmUnreadByUser.set(
+      peerUserId,
+      (evilbramPmUnreadByUser.get(peerUserId) ?? 0) + 1
+    );
+  } else {
+    evilbramPmUnreadByUser.delete(peerUserId);
+  }
+
+  if (dashboardOpen) {
+    await evilbramPmDashboardApp.render();
+  }
+
+  if (flag?.popup === true) {
+    await openPmReplyPopup(message);
     return;
   }
 
-  if (flag.direction === "player-to-gm" && flag.gmUserId === game.user.id && message.visible) {
-    evilbramPmUnreadByUser.set(
-      flag.playerUserId,
-      (evilbramPmUnreadByUser.get(flag.playerUserId) ?? 0) + 1
-    );
-
-    if (evilbramPmDashboardApp?.rendered) {
-      await evilbramPmDashboardApp.render();
-    } else {
-      await showGmReplyNotification(message);
-    }
+  // Conservation du comportement historique : côté MJ, un MP entrant classique
+  // déclenche une petite notification uniquement si le tableau de bord est fermé.
+  if (game.user.isGM && !dashboardOpen) {
+    await showGmIncomingNotification(message);
   }
+}
+
+function injectPrivateMessagesActorButton(application, element) {
+  const ActorDirectory = foundry?.applications?.sidebar?.tabs?.ActorDirectory;
+  if (!ActorDirectory || !(application instanceof ActorDirectory)) return;
+  if (!(element instanceof HTMLElement)) return;
+  if (element.querySelector(".evilbram-pm-directory-launcher")) return;
+
+  const list = element.querySelector(".directory-list");
+  const container = list?.parentElement ?? element.querySelector(".directory") ?? element;
+
+  const launcher = document.createElement("div");
+  launcher.className = "evilbram-pm-directory-launcher";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "evilbram-pm-directory-button";
+  button.title = "Ouvrir les messages privés";
+  button.setAttribute("aria-label", "Messages privés");
+  button.innerHTML = '<span class="evilbram-pm-directory-button-label">Messages privés</span>';
+  button.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
+    openPmDashboard();
+  });
+
+  launcher.append(button);
+
+  if (list && list.parentElement === container) container.insertBefore(launcher, list);
+  else container.prepend(launcher);
 }
 
 Hooks.on("renderChatMessageHTML", (message, html) => {
@@ -650,8 +757,12 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
 
 Hooks.on("createChatMessage", message => {
   handleCreatedPmMessage(message).catch(err => {
-    console.error("Evil Toolbox | MP MJ | Traitement message impossible", err);
+    console.error("Evil Toolbox | Messages privés | Traitement message impossible", err);
   });
+});
+
+Hooks.on("renderApplicationV2", (application, element) => {
+  injectPrivateMessagesActorButton(application, element);
 });
 
 Hooks.once("ready", () => {
@@ -668,7 +779,7 @@ Hooks.on("getSceneControlButtons", controls => {
 
   tokens.tools.evilbramPrivateMessages = {
     name: "evilbramPrivateMessages",
-    title: "MP MJ",
+    title: "Messages privés",
     icon: "fa-solid fa-envelope",
     order: Object.keys(tokens.tools).length,
     button: true,

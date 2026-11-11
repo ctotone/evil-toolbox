@@ -1,10 +1,20 @@
 <section class="evilbram-pm-reply-content">
+  {{#if peer}}
+    <header class="evilbram-pm-popup-peer">
+      <img src="{{peer.img}}" alt="">
+      <div>
+        <strong>{{peer.label}}</strong>
+        <small>{{peer.roleLabel}}{{#if peer.characterName}} · {{peer.userName}}{{/if}}</small>
+      </div>
+    </header>
+  {{/if}}
+
   <div class="evilbram-pm-player-history">
     {{#if hasHistory}}
       {{#each history}}
-        <article class="evilbram-pm-player-history-item {{#if fromGm}}from-gm{{else}}from-player{{/if}}">
+        <article class="evilbram-pm-player-history-item {{#if fromMe}}from-player{{else}}from-gm{{/if}}">
           <div class="evilbram-pm-player-history-meta">
-            <strong>{{#if fromGm}}MJ{{else}}Moi{{/if}}</strong>
+            <strong>{{#if fromMe}}Moi{{else}}{{../peer.label}}{{/if}}</strong>
             <time>{{time}}</time>
           </div>
           <div class="evilbram-pm-player-history-body">{{{content}}}</div>
@@ -20,13 +30,13 @@
     id="evilbram-pm-reply-text"
     data-pm-reply-draft
     rows="5"
-    placeholder="Écrire une réponse au MJ…"
+    placeholder="Écrire une réponse…"
   >{{reply}}</textarea>
 
   <div class="evilbram-pm-reply-actions">
     <button type="button" data-action="sendReply">
       <i class="fa-solid fa-paper-plane"></i>
-      Envoyer au MJ
+      Envoyer
     </button>
   </div>
 </section>

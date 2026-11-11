@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.5.0
+
+- bouton `Messages privés` : visuel détouré définitif intégré et ratio CSS ajusté à 2048 × 543.
+- ajustement du bouton `Messages privés` dans le répertoire Actors : ratio natif du visuel respecté, suppression du cadre CSS et repositionnement du libellé ;
+- généralisation de `MP MJ` en `Messages privés` accessible aux MJ et aux joueurs ;
+- ajout des conversations privées joueur ↔ joueur et joueur ↔ MJ ;
+- conservation des whispers Foundry comme source de vérité, sans base de messages parallèle ;
+- compatibilité de lecture avec les anciens historiques MP MJ 1.4.x ;
+- nouveaux messages marqués avec expéditeur et destinataire explicites tout en conservant les champs historiques lorsqu’un MJ est impliqué ;
+- accès joueur via un bouton `Messages privés` injecté au-dessus de la liste des Actors dans le volet de droite ;
+- intégration du visuel définitif du bouton `Messages privés` fourni par l’utilisateur ;
+- conservation des envois `Envoi classique` et `Envoi Popup` ;
+- bouton de chat généralisé en `Répondre` pour tout MP Toolbox reçu ;
+- popup de réponse généralisée avec historique du contact ;
+- commandes `/r` et `/roll` conservées pour tous les échanges privés ;
+- accès historique `game.evilbramToolbox.privateMessages.open()` conservé ;
+- contrôle Scene `Messages privés` conservé pour le MJ ;
+- compendiums inchangés.
+
 ## 1.4.2
 
 - correction de l’organisation du compendium `EVILBRAM - Playlists JDR` depuis le world Foundry de production ;
