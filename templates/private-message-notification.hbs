@@ -1,13 +1,17 @@
 <section class="evilbram-pm-notification-content">
   <div class="evilbram-pm-notification-icon">
-    <i class="fa-solid fa-envelope"></i>
+    {{#if senderImg}}
+      <img src="{{senderImg}}" alt="{{senderLabel}}">
+    {{else}}
+      <i class="fa-regular fa-envelope"></i>
+    {{/if}}
   </div>
   <div class="evilbram-pm-notification-text">
-    <strong>Nouveau MP de {{senderLabel}}</strong>
-    <span>Un nouveau message privé vient d'arriver.</span>
+    <strong>{{senderLabel}}</strong>
+    <span>{{evilbramPmT "Notification.MessageReceived"}}</span>
   </div>
   <div class="evilbram-pm-notification-actions">
-    <button type="button" data-action="closeNotification">Fermer</button>
-    <button type="button" data-action="openDashboard">Ouvrir Messages privés</button>
+    <button type="button" data-action="closeNotification">{{evilbramPmT "Notification.Ignore"}}</button>
+    <button type="button" data-action="openDashboard"><i class="fa-solid fa-arrow-up-right-from-square"></i> {{evilbramPmT "Notification.ViewMessage"}}</button>
   </div>
 </section>

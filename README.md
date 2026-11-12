@@ -115,4 +115,10 @@ Evil Toolbox 1.5.0 généralise l'ancien centre `MP MJ` en messagerie privée ac
 
 ## Statut
 
-Candidate 1.5.0 : généralisation de la messagerie privée aux MJ et joueurs.
+Version 1.5.1 : généralisation de la messagerie privée aux MJ et joueurs.
+
+
+### Messages privés — 1.5.1
+
+La messagerie privée Toolbox reprend désormais les évolutions du module autonome Evil Messenger : conversations utilisateur ↔ utilisateur, envois classiques ou Popup, multi-destinataires individuels, jets privés `/r` et `/roll`, accusés de lecture « Vu », indicateur de saisie « écrit… », présence en ligne/hors ligne, historique par contact et interface harmonisée. Les messages restent des `ChatMessage` whisper natifs Foundry et les historiques Toolbox existants restent compatibles.
+

@@ -1,42 +1,43 @@
 <section class="evilbram-pm-reply-content">
   {{#if peer}}
     <header class="evilbram-pm-popup-peer">
-      <img src="{{peer.img}}" alt="">
+      <span class="evilbram-pm-avatar"><img src="{{peer.img}}" alt=""><span class="evilbram-pm-avatar-status {{#if peer.active}}online{{else}}offline{{/if}}"></span></span>
       <div>
         <strong>{{peer.label}}</strong>
-        <small>{{peer.roleLabel}}{{#if peer.characterName}} · {{peer.userName}}{{/if}}</small>
+        {{#if peer.characterName}}<small>{{peer.userName}}</small>{{/if}}
       </div>
     </header>
   {{/if}}
 
-  <div class="evilbram-pm-player-history">
+  <div class="evilbram-pm-history-viewport">
+    <div class="evilbram-pm-player-history">
     {{#if hasHistory}}
       {{#each history}}
-        <article class="evilbram-pm-player-history-item {{#if fromMe}}from-player{{else}}from-gm{{/if}}">
-          <div class="evilbram-pm-player-history-meta">
-            <strong>{{#if fromMe}}Moi{{else}}{{../peer.label}}{{/if}}</strong>
-            <time>{{time}}</time>
-          </div>
+        <article class="evilbram-pm-player-history-item {{#if fromMe}}from-player{{else}}from-gm{{/if}} {{#if seen}}is-read{{/if}}" data-pm-message-id="{{id}}">
           <div class="evilbram-pm-player-history-body">{{{content}}}</div>
+          <div class="evilbram-pm-message-footer">
+            <time>{{time}}</time>
+            {{#if fromMe}}<span class="evilbram-pm-read-indicator" title="{{evilbramPmT 'Read.Seen'}}" aria-label="{{evilbramPmT 'Read.Seen'}}"><img src="modules/evil-toolbox/assets/pm-read-indicator.webp" alt="{{evilbramPmT 'Read.Seen'}}"></span>{{/if}}
+          </div>
         </article>
       {{/each}}
     {{else}}
-      <p class="evilbram-pm-player-history-empty">Aucun échange précédent.</p>
+      <div class="evilbram-pm-player-history-empty"><span>{{evilbramPmT "Dashboard.NoMessages"}}</span></div>
     {{/if}}
+    </div>
   </div>
 
-  <label class="evilbram-pm-reply-label" for="evilbram-pm-reply-text">Ta réponse</label>
-  <textarea
-    id="evilbram-pm-reply-text"
-    data-pm-reply-draft
-    rows="5"
-    placeholder="Écrire une réponse…"
-  >{{reply}}</textarea>
+  <div class="evilbram-pm-typing" data-pm-typing-indicator hidden role="status" aria-live="polite">
+    <span class="evilbram-pm-typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span data-pm-typing-label></span>
+  </div>
 
-  <div class="evilbram-pm-reply-actions">
-    <button type="button" data-action="sendReply">
-      <i class="fa-solid fa-paper-plane"></i>
-      Envoyer
-    </button>
+  <div class="evilbram-pm-reply-compose">
+    <div class="evilbram-pm-texture-field">
+      <textarea id="evilbram-pm-reply-text" data-pm-reply-draft spellcheck="true" rows="4" placeholder="{{evilbramPmT 'Reply.DraftPlaceholder'}}">{{reply}}</textarea>
+    </div>
+    <div class="evilbram-pm-reply-actions">
+      <button type="button" data-action="sendReply"><i class="fa-solid fa-paper-plane"></i> {{evilbramPmT "Reply.Send"}}</button>
+    </div>
   </div>
 </section>

@@ -1,110 +1,111 @@
 <section class="evilbram-pm-dashboard-content">
   <aside class="evilbram-pm-sidebar">
-    <header>
-      <strong>Contacts</strong>
-      <span>Destinataires du prochain envoi</span>
+    <header class="evilbram-pm-sidebar-heading">
+      <div class="evilbram-pm-sidebar-title">{{evilbramPmT "Dashboard.Contacts"}}</div>
     </header>
 
     {{#if hasContacts}}
       <div class="evilbram-pm-player-list">
-        {{#each contacts}}
-          <div class="evilbram-pm-player {{#if selectedThread}}selected{{/if}}">
-            <label class="evilbram-pm-recipient-check" title="Inclure dans le prochain envoi">
-              <input
-                type="checkbox"
-                data-pm-recipient="{{id}}"
-                {{#if checked}}checked{{/if}}
-                {{#unless active}}disabled{{/unless}}
-              >
-            </label>
-
-            <button
-              type="button"
-              class="evilbram-pm-player-open"
-              data-action="selectConversation"
-              data-user-id="{{id}}"
-              title="Ouvrir la conversation avec {{label}}"
-            >
-              <img src="{{img}}" alt="">
-              <span class="evilbram-pm-player-text">
-                <strong>{{label}}</strong>
-                <small>
-                  {{roleLabel}}
-                  {{#if characterName}} · {{userName}}{{/if}}
-                  · {{#if active}}connecté{{else}}hors ligne{{/if}}
-                </small>
-              </span>
-              {{#if unread}}<span class="evilbram-pm-unread">{{unread}}</span>{{/if}}
-            </button>
-          </div>
-        {{/each}}
+        <section class="evilbram-pm-contact-section" aria-label="{{evilbramPmT 'Dashboard.ContactsOnline'}}">
+          {{#each onlineContacts}}
+            <div class="evilbram-pm-player {{#if selectedThread}}selected{{/if}}">
+              <label class="evilbram-pm-recipient-check" title="{{evilbramPmT 'Dashboard.IncludeRecipient'}}">
+                <input type="checkbox" data-pm-recipient="{{id}}" aria-label="{{evilbramPmT 'Dashboard.IncludeRecipientAria' name=label}}" {{#if checked}}checked{{/if}}>
+              </label>
+              <button type="button" class="evilbram-pm-player-open" data-action="selectConversation" data-user-id="{{id}}" title="{{evilbramPmT 'Dashboard.OpenConversation' name=label}}">
+                <span class="evilbram-pm-avatar"><img src="{{img}}" alt=""><span class="evilbram-pm-avatar-status online"></span></span>
+                <span class="evilbram-pm-player-text"><strong>{{label}}</strong>{{#if characterName}}<small>{{userName}}</small>{{/if}}</span>
+                {{#if unread}}<span class="evilbram-pm-unread">{{unread}}</span>{{/if}}
+              </button>
+            </div>
+          {{/each}}
+        </section>
+        <section class="evilbram-pm-contact-section offline" aria-label="{{evilbramPmT 'Dashboard.ContactsOffline'}}">
+          {{#each offlineContacts}}
+            <div class="evilbram-pm-player is-offline {{#if selectedThread}}selected{{/if}}">
+              <label class="evilbram-pm-recipient-check" title="{{evilbramPmT 'Dashboard.OfflineRecipient'}}">
+                <input type="checkbox" data-pm-recipient="{{id}}" aria-label="{{evilbramPmT 'Dashboard.OfflineRecipientAria' name=label}}" disabled>
+              </label>
+              <button type="button" class="evilbram-pm-player-open" data-action="selectConversation" data-user-id="{{id}}" title="{{evilbramPmT 'Dashboard.OfflineConversation' name=label}}">
+                <span class="evilbram-pm-avatar"><img src="{{img}}" alt=""><span class="evilbram-pm-avatar-status offline"></span></span>
+                <span class="evilbram-pm-player-text"><strong>{{label}}</strong>{{#if characterName}}<small>{{userName}}</small>{{/if}}</span>
+                {{#if unread}}<span class="evilbram-pm-unread">{{unread}}</span>{{/if}}
+              </button>
+            </div>
+          {{/each}}
+        </section>
       </div>
     {{else}}
-      <p class="evilbram-pm-empty">Aucun autre utilisateur disponible.</p>
+      <p class="evilbram-pm-empty">{{evilbramPmT "Dashboard.NoOtherUsers"}}</p>
     {{/if}}
   </aside>
 
   <main class="evilbram-pm-main">
     {{#if selectedUser}}
       <header class="evilbram-pm-thread-header">
-        <img src="{{selectedUser.img}}" alt="">
+        <span class="evilbram-pm-avatar"><img src="{{selectedUser.img}}" alt=""><span class="evilbram-pm-avatar-status {{#if selectedUser.active}}online{{else}}offline{{/if}}"></span></span>
         <div>
           <strong>{{selectedUser.label}}</strong>
-          <small>
-            {{selectedUser.roleLabel}}
-            {{#if selectedUser.characterName}} · {{selectedUser.userName}}{{/if}}
-          </small>
+          {{#if selectedUser.characterName}}<small>{{selectedUser.userName}}</small>{{/if}}
         </div>
       </header>
 
-      <div class="evilbram-pm-history">
+      <div class="evilbram-pm-history-viewport">
+        <div class="evilbram-pm-history">
         {{#if hasHistory}}
           {{#each history}}
-            <article class="evilbram-pm-history-item {{#if outgoing}}outgoing{{else}}incoming{{/if}}">
-              <div class="evilbram-pm-history-meta">
-                <strong>{{#if outgoing}}Moi{{else}}{{../selectedUser.label}}{{/if}}</strong>
-                <time>{{time}}</time>
-              </div>
+            <article class="evilbram-pm-history-item {{#if outgoing}}outgoing{{else}}incoming{{/if}} {{#if seen}}is-read{{/if}}" data-pm-message-id="{{id}}">
               <div class="evilbram-pm-history-content">{{{content}}}</div>
+              <div class="evilbram-pm-message-footer">
+                <time>{{time}}</time>
+                {{#if outgoing}}<span class="evilbram-pm-read-indicator" title="{{evilbramPmT 'Read.Seen'}}" aria-label="{{evilbramPmT 'Read.Seen'}}"><img src="modules/evil-toolbox/assets/pm-read-indicator.webp" alt="{{evilbramPmT 'Read.Seen'}}"></span>{{/if}}
+              </div>
             </article>
           {{/each}}
         {{else}}
           <div class="evilbram-pm-thread-empty">
-            <i class="fa-regular fa-envelope"></i>
-            <p>Aucun échange de MP avec ce contact pour le moment.</p>
+            <p>{{evilbramPmT "Dashboard.NoMessages"}}</p>
           </div>
         {{/if}}
+        </div>
+      </div>
+      <div class="evilbram-pm-typing" data-pm-typing-indicator hidden role="status" aria-live="polite">
+        <span class="evilbram-pm-typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span data-pm-typing-label></span>
       </div>
 
       <footer class="evilbram-pm-composer">
         {{#unless canWhisper}}
           <p class="evilbram-pm-permission-warning">
-            Tu n'as pas l'autorisation Foundry d'envoyer des messages privés dans ce world.
+            {{evilbramPmT "Dashboard.PermissionWarning"}}
           </p>
         {{/unless}}
 
-        <textarea
-          data-pm-draft
-          rows="4"
-          placeholder="Écrire un message privé…"
-          {{#unless canWhisper}}disabled{{/unless}}
-        >{{draft}}</textarea>
+        <div class="evilbram-pm-texture-field">
+          <textarea
+            id="evilbram-pm-draft"
+            data-pm-draft
+            spellcheck="true"
+            rows="4"
+            placeholder="{{evilbramPmT 'Dashboard.DraftPlaceholder'}}"
+            {{#unless canWhisper}}disabled{{/unless}}
+          >{{draft}}</textarea>
+        </div>
 
         <div class="evilbram-pm-send-options">
           <button type="button" class="evilbram-pm-send evilbram-pm-send-classic" data-action="sendClassic" {{#unless canWhisper}}disabled{{/unless}}>
             <i class="fa-solid fa-paper-plane"></i>
-            Envoi classique
+            {{evilbramPmT "Dashboard.SendClassic"}}
           </button>
           <button type="button" class="evilbram-pm-send evilbram-pm-send-popup" data-action="sendPopup" {{#unless canWhisper}}disabled{{/unless}}>
             <i class="fa-regular fa-window-restore"></i>
-            Envoi Popup
+            {{evilbramPmT "Dashboard.SendPopup"}}
           </button>
         </div>
       </footer>
     {{else}}
       <div class="evilbram-pm-thread-empty">
-        <i class="fa-regular fa-envelope"></i>
-        <p>Sélectionne un contact pour afficher ses échanges.</p>
+        <p>{{evilbramPmT "Dashboard.SelectContact"}}</p>
       </div>
     {{/if}}
   </main>

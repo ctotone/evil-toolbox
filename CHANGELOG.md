@@ -1,3 +1,25 @@
+## 1.5.1
+
+- correction des chemins CSS des assets Messages privés depuis `styles/tools/` (`../../assets/...`).
+### Messages privés — intégration des évolutions Evil Messenger 1.0.0
+- intégration dans Evil Toolbox des évolutions fonctionnelles et visuelles validées dans le module autonome Evil Messenger, sans intégrer sa couche de localisation ;
+- accusés de lecture persistants « Vu », enregistrés par interlocuteur dans le flag User `evil-toolbox.readThrough` lorsque la conversation est réellement consultée dans l’interface Toolbox ;
+- indicateur de saisie « écrit… » synchronisé en temps réel via le canal natif `module.evil-toolbox`, sans transmission ni persistance du texte saisi ;
+- contacts regroupés dynamiquement entre utilisateurs connectés et hors ligne, avec actualisation à la connexion/déconnexion ;
+- sélection automatique du contact actif comme destinataire, tout en conservant la sélection multiple manuelle ;
+- conservation de l’historique consultable pour les contacts hors ligne, avec envoi désactivé vers les destinataires déconnectés ;
+- interface Messages privés, popup de réponse et notification MJ alignées sur le design d’Evil Messenger : textures, surfaces, scrollbars, bulles compactes, boutons et palette harmonisés ;
+- ajout de `chat-texture.webp`, `gm-avatar.webp` et `pm-read-indicator.webp` aux assets Toolbox ;
+- avatar MJ dédié dans les contacts et en-têtes ; portrait du personnage attribué (`user.character.img`) pour les joueurs, avec avatar utilisateur en repli ;
+- indicateur « Vu » en image sur les messages sortants effectivement consultés ;
+- popup de réponse portée à 670 × 600 px et cohérente avec la fenêtre principale ;
+- notification MJ enrichie avec le portrait de l’expéditeur et conservée uniquement lorsque le centre MP n’est ni ouvert ni déjà affiché sur ce contact ;
+- comportement de scroll préservé : ouverture sur le dernier message, mais aucun scroll forcé pendant la lecture d’anciens messages lorsque l’interlocuteur commence à écrire ;
+- commandes privées `/r` et `/roll`, envoi classique, envoi Popup, multi-destinataires individuels et réponses depuis le chat conservés ;
+- compatibilité maintenue avec les anciens flags MP MJ Evil Toolbox 1.4.x (`gmUserId` / `playerUserId`) afin de ne pas perdre les historiques existants ;
+- API publique conservée : `game.evilbramToolbox.privateMessages.open()` ;
+- aucune modification des compendiums.
+
 # Changelog
 
 ## 1.5.0

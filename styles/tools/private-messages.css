@@ -1,3 +1,147 @@
+/* ============================================================
+   EVILBRAM TOOLBOX — PALETTE CENTRALISÉE
+   Modifiez uniquement les valeurs ci-dessous pour recolorer
+   les trois fenêtres : messagerie, popup, notification MJ.
+   Les valeurs sont identiques à la version 0.2.5.
+   Les variables --et-color-* ne modifient pas le core Foundry.
+   ============================================================ */
+:root {
+  --et-color-transparent: transparent;
+  --et-color-white: white;
+  --et-color-black: black;
+
+  /* Fonds et surfaces */
+  --et-color-background-main: #111;
+  --et-color-background-sidebar-bottom: #151515;
+  --et-color-background-composer-bottom: #171717;
+  --et-color-background-panel: #191919;
+  /* Lueur et ombre très légères, communes aux panneaux et aux bulles. */
+  --et-color-surface-sheen: rgba(255, 255, 255, 0.032);
+  --et-color-surface-shade: rgba(0, 0, 0, 0.065);
+  --et-pm-surface-gradient-angle: 155deg;
+  --et-pm-surface-gradient: linear-gradient(
+    var(--et-pm-surface-gradient-angle),
+    var(--et-color-surface-sheen) 0%,
+    var(--et-color-transparent) 62%,
+    var(--et-color-surface-shade) 100%
+  );
+  --et-color-background-panel-top: #1b1b1b;
+  --et-color-background-avatar-ring: #202020;
+  --et-color-background-popup-top: #222;
+  --et-color-background-bubble: #242424;
+  --et-color-background-button: #282828;
+  --et-color-background-send: #39000096;
+  --et-color-background-send-hover: #530202;
+  --et-color-background-bubble-sent: #303030;
+  --et-color-background-button-hover: #383838;
+  --et-color-scrollbar-thumb: #303030;
+  --et-color-scrollbar-track: transparent;
+  --et-color-overlay-sidebar: rgba(0,0,0,0.12);
+  --et-color-overlay-notification-old: rgba(0,0,0,0.14);
+  --et-color-overlay-bubble-old: rgba(0,0,0,0.16);
+  --et-color-overlay-bubble-incoming-old: rgba(140,90,45,0.16);
+  --et-color-background-empty-icon: rgba(147,171,201,.085);
+  --et-color-background-notification-icon: rgba(149,176,207,.1);
+  --et-color-background-contact-selected-old: rgba(152,175,205,.12);
+  --et-color-background-contact-hover-old: rgba(170,185,207,.075);
+  --et-color-background-directory-hover: rgba(170,95,35,0.12);
+  --et-color-background-count-badge: rgba(181,197,220,.12);
+  --et-color-background-contact-hover: rgba(255,255,255,.045);
+  --et-color-background-contact-selected: rgba(255,255,255,.075);
+  --et-color-background-thread-header: rgba(27,27,27,.94);
+  --et-color-overlay-bubble-outgoing-old: rgba(55,105,190,0.16);
+  --et-color-overlay-contact-selected-old: rgba(90,135,220,0.18);
+
+  /* Textes et accents */
+  --et-color-status-offline-dot: #788392;
+  --et-color-status-offline-avatar: #7b8492;
+  --et-color-status-online: #7bbfa3;
+  --et-color-status-avatar-online: #1e8432;
+  --et-color-text-placeholder: #7f8c9f;
+  --et-color-text-timestamp: #8995a7;
+  --et-color-text-read: #038520;
+  --et-color-checkbox-accent: #91accd;
+  --et-color-text-empty-muted: #929cab;
+  --et-color-text-secondary: #98a3b4;
+  --et-color-selection-marker: #9eb4d0;
+  --et-color-badge-background: #9fabc2;
+  --et-color-text-tag: #a1b6d2;
+  --et-color-text-notification-kicker: #a5b9d3;
+  --et-color-text-empty-icon: #a8b9d0;
+  --et-color-text-empty: #aab4c3;
+  --et-color-badge-alert-background: #b3261e;
+  --et-color-accent: #b5c5dc;
+  --et-color-text-count-badge: #b8c9de;
+  --et-color-text-section: #bbc4d0;
+  --et-color-text-message-meta: #bdc9d8;
+  --et-color-text-notification-icon: #c0cfe2;
+  --et-color-text-composer-label: #d1d9e5;
+  --et-color-text-button-secondary: #d4deeb;
+  --et-color-text-empty-title: #d5dce7;
+  --et-color-text-button: #dfe8f4;
+  --et-color-text-contact-name: #e4e9f1;
+  --et-color-text-input: #e5ebf3;
+  --et-color-text-primary: #e6e9ef;
+  --et-color-text-popup-name: #eef2f7;
+  --et-color-text-notification-name: #eff2f7;
+  --et-color-text-thread-name: #f0f2f5;
+  --et-color-text-directory-button: #f3ead3;
+
+  /* Bordures */
+  --et-color-border-input: #49494978;
+  --et-color-border-button-secondary: #4d5968;
+  --et-color-border-button-primary: #65758c;
+  --et-color-border-foundry-fallback: #666;
+  --et-color-border-input-focus: #819bbb;
+  --et-color-border-button-hover: #94abc7;
+  --et-color-border-neutral-translucent: rgba(120,120,120,0.35);
+  --et-color-border-empty-icon: rgba(147,171,201,.12);
+  --et-color-border-contact-selected-old: rgba(167,190,223,.31);
+  --et-color-border-bubble-sent: rgba(169,195,225,.23);
+  --et-color-border-notification-icon: rgba(172,194,223,.2);
+  --et-color-border-notification: rgba(182,196,216,.12);
+  --et-color-border-bubble: rgba(182,196,216,.13);
+  --et-color-border-directory-hover: rgba(190,120,55,0.55);
+  --et-color-border-divider: #49494978;
+  --et-color-border-avatar: rgba(255,255,255,.14);
+  --et-color-outline-contact-selected-old: rgba(90,135,220,0.45);
+
+  /* Ombres, lumières et états */
+  --et-color-shadow-bubble-soft: rgba(0,0,0,.13);
+  --et-color-shadow-input-inset: rgba(0,0,0,.17);
+  --et-color-shadow-pressed-inset: rgba(0,0,0,.18);
+  --et-color-shadow-unread: rgba(0,0,0,.2);
+  --et-color-shadow-pressed: rgba(0,0,0,.22);
+  --et-color-shadow-button: rgba(0,0,0,.28);
+  --et-color-shadow-button-hover: rgba(0,0,0,.34);
+  --et-color-shadow-directory-glow: rgba(0,0,0,0.8);
+  --et-color-shadow-directory-text: rgba(0,0,0,0.95);
+  --et-color-glow-status-online: rgba(123,191,163,.09);
+  --et-color-focus-ring-input: rgba(129,155,187,.14);
+  --et-color-highlight-bubble-inset: rgba(255,255,255,.035);
+  --et-color-highlight-button-inset: rgba(255,255,255,.07);
+  --et-color-highlight-button-hover: rgba(255,255,255,.09);
+
+  /* Positionnement libre de l'heure et de la coche sur les bulles.
+     Ces variables ne modifient jamais la hauteur des messages.
+     bottom : valeur positive = vers l'intérieur / vers le haut.
+     right  : valeur positive = vers l'intérieur / vers la gauche.
+     Les valeurs négatives font dépasser l'élément de la bulle. */
+  --et-pm-time-bottom: 1px;
+  --et-pm-time-right: 20px;
+  --et-pm-read-bottom: 2px;
+  --et-pm-read-right: 1px;
+  --et-pm-read-width: 17px;
+  --et-pm-read-height: 8px;
+  --et-pm-typing-clearance: 14px;
+
+  /* Texture des zones de discussion : 0 = invisible, 1 = opacité originale du WebP. */
+  --et-pm-texture-history-opacity: 0.50;
+  --et-pm-texture-composer-opacity: 0.50;
+  /* Fond uni sous la texture, y compris dans la zone de rédaction. */
+  --et-pm-texture-input-background: #111;
+}
+
 .evilbram-pm-dashboard .window-content,
 .evilbram-pm-reply .window-content,
 .evilbram-pm-notification .window-content {
@@ -16,8 +160,8 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--color-border-light-2, #666);
-  background: rgba(0, 0, 0, 0.12);
+  border-right: 1px solid var(--et-color-border-divider);
+  background: var(--et-color-overlay-sidebar);
 }
 
 .evilbram-pm-sidebar > header {
@@ -25,7 +169,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  border-bottom: 1px solid var(--color-border-light-2, #666);
+  border-bottom: 1px solid var(--et-color-border-divider);
 }
 
 .evilbram-pm-sidebar > header span {
@@ -48,8 +192,8 @@
 }
 
 .evilbram-pm-player.selected {
-  background: rgba(90, 135, 220, 0.18);
-  outline: 1px solid rgba(90, 135, 220, 0.45);
+  background: var(--et-color-overlay-contact-selected-old);
+  outline: 1px solid var(--et-color-outline-contact-selected-old);
 }
 
 .evilbram-pm-recipient-check {
@@ -69,7 +213,7 @@
   align-items: center;
   gap: 0.5rem;
   border: 0;
-  background: transparent;
+  background: var(--et-color-transparent);
   text-align: left;
 }
 
@@ -93,7 +237,7 @@
 .evilbram-pm-player-text small {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  var(--et-color-white)-space: nowrap;
 }
 
 .evilbram-pm-player-text small {
@@ -108,8 +252,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: #b3261e;
-  color: white;
+  background: var(--et-color-badge-alert-background);
+  color: var(--et-color-white);
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -127,7 +271,7 @@
   align-items: center;
   gap: 0.65rem;
   padding: 0.7rem 0.85rem;
-  border-bottom: 1px solid var(--color-border-light-2, #666);
+  border-bottom: 1px solid var(--et-color-border-divider);
 }
 
 .evilbram-pm-thread-header > div {
@@ -153,18 +297,18 @@
   max-width: 82%;
   padding: 0.55rem 0.65rem;
   border-radius: 8px;
-  border: 1px solid var(--color-border-light-2, #666);
-  background: rgba(0, 0, 0, 0.16);
+  border: 1px solid var(--et-color-border-divider);
+  background: var(--et-color-overlay-bubble-old);
 }
 
 .evilbram-pm-history-item.outgoing {
   align-self: flex-end;
-  background: rgba(55, 105, 190, 0.16);
+  background: var(--et-color-overlay-bubble-outgoing-old);
 }
 
 .evilbram-pm-history-item.incoming {
   align-self: flex-start;
-  background: rgba(140, 90, 45, 0.16);
+  background: var(--et-color-overlay-bubble-incoming-old);
 }
 
 .evilbram-pm-history-meta {
@@ -188,7 +332,7 @@
 .evilbram-pm-composer {
   flex: 0 0 auto;
   padding: 0.75rem;
-  border-top: 1px solid var(--color-border-light-2, #666);
+  border-top: 1px solid var(--et-color-border-divider);
 }
 
 .evilbram-pm-composer textarea,
@@ -209,12 +353,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  white-space: nowrap;
+  var(--et-color-white)-space: nowrap;
 }
 
 .evilbram-pm-send {
   width: auto;
-  min-width: 150px;
 }
 
 .evilbram-pm-send-options .evilbram-pm-send:first-child {
@@ -243,7 +386,7 @@
   justify-content: flex-end;
   margin-top: 0.5rem;
   padding-top: 0.4rem;
-  border-top: 1px solid rgba(120, 120, 120, 0.35);
+  border-top: 1px solid var(--et-color-border-neutral-translucent);
 }
 
 .evilbram-pm-chat-reply {
@@ -256,7 +399,7 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: rgba(0, 0, 0, 0.14);
+  background: var(--et-color-overlay-notification-old);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -273,9 +416,9 @@
 
 .evilbram-pm-received-message {
   padding: 0.7rem;
-  border: 1px solid var(--color-border-light-2, #666);
+  border: 1px solid var(--et-color-border-divider);
   border-radius: 7px;
-  background: rgba(0, 0, 0, 0.16);
+  background: var(--et-color-overlay-bubble-old);
 }
 
 .evilbram-pm-received-label {
@@ -298,19 +441,19 @@
 .evilbram-pm-player-history-item {
   max-width: 86%;
   padding: 0.55rem 0.65rem;
-  border: 1px solid var(--color-border-light-2, #666);
+  border: 1px solid var(--et-color-border-divider);
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.16);
+  background: var(--et-color-overlay-bubble-old);
 }
 
 .evilbram-pm-player-history-item.from-gm {
   align-self: flex-start;
-  background: rgba(55, 105, 190, 0.16);
+  background: var(--et-color-overlay-bubble-outgoing-old);
 }
 
 .evilbram-pm-player-history-item.from-player {
   align-self: flex-end;
-  background: rgba(140, 90, 45, 0.16);
+  background: var(--et-color-overlay-bubble-incoming-old);
 }
 
 .evilbram-pm-player-history-meta {
@@ -384,7 +527,7 @@
 
 .evilbram-pm-notification-actions button {
   width: auto;
-  white-space: nowrap;
+  var(--et-color-white)-space: nowrap;
 }
 
 @media (max-width: 760px) {
@@ -395,7 +538,7 @@
   .evilbram-pm-sidebar {
     max-height: 220px;
     border-right: 0;
-    border-bottom: 1px solid var(--color-border-light-2, #666);
+    border-bottom: 1px solid var(--et-color-border-divider);
   }
 }
 
@@ -414,14 +557,14 @@
   height: auto !important;
   min-height: 0;
   max-height: none;
-  aspect-ratio: 2048 / 543;
+  aspect-ratio: 2048 / 362;
   margin: 0;
   padding: 0;
   overflow: hidden;
   border: 0;
   border-radius: 0;
   outline: 0;
-  background-color: transparent;
+  background-color: var(--et-color-transparent);
   background-image: url("../../assets/private-messages-button.webp");
   background-position: center;
   background-repeat: no-repeat;
@@ -440,20 +583,21 @@
 .evilbram-pm-directory-button-label {
   position: relative;
   z-index: 1;
-  color: #f3ead3;
+  color: var(--et-color-text-directory-button);
   font-size: 1rem;
   font-weight: 700;
   padding-left: 65px;
+  line-height: 1.1;
   letter-spacing: 0.035em;
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 3px var(--et-color-shadow-directory-text), 0 0 6px var(--et-color-shadow-directory-glow);
 }
 
 .evilbram-pm-permission-warning {
   margin: 0 0 0.55rem;
   padding: 0.45rem 0.55rem;
-  border: 1px solid rgba(190, 120, 55, 0.55);
+  border: 1px solid var(--et-color-border-directory-hover);
   border-radius: 5px;
-  background: rgba(170, 95, 35, 0.12);
+  background: var(--et-color-background-directory-hover);
   font-size: 0.8rem;
 }
 
@@ -463,7 +607,7 @@
   align-items: center;
   gap: 0.6rem;
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--color-border-light-2, #666);
+  border-bottom: 1px solid var(--et-color-border-divider);
 }
 
 .evilbram-pm-popup-peer img {
@@ -482,4 +626,578 @@
 
 .evilbram-pm-popup-peer small {
   opacity: 0.65;
+}
+
+/* ------------------------------------------------------------
+   Evilbram Messenger — interface neutre et raffinée (0.2 DEV)
+   Styles limités à l'application de messagerie, pas au core.
+   ------------------------------------------------------------ */
+.evilbram-pm-dashboard {
+  --et-radius: 10px;
+}
+.evilbram-pm-dashboard .window-content {
+  background: var(--et-color-background-main);
+  color: var(--et-color-text-primary);
+}
+.evilbram-pm-dashboard-content {
+  grid-template-columns: 282px minmax(0,1fr);
+  background: var(--et-color-background-main);
+  color: var(--et-color-text-primary);
+  font-family: inherit;
+}
+.evilbram-pm-sidebar {
+  border-right: 1px solid var(--et-color-border-divider);
+  background: linear-gradient(155deg,var(--et-color-background-panel-top),var(--et-color-background-sidebar-bottom) 68%);
+}
+.evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading {
+  padding: 22px 18px 19px;
+  border-bottom: 1px solid var(--et-color-border-divider);
+  gap: 5px;
+}
+.evilbram-pm-eyebrow,.evilbram-pm-thread-kicker {
+  color: var(--et-color-text-secondary); font-size: 10px; font-weight: 750;
+  letter-spacing: .16em;
+}
+.evilbram-pm-sidebar-title {font-size: 19px;font-weight: 750;display:flex;align-items:center;gap:10px;line-height:1.3;}
+.evilbram-pm-contact-total {display:inline-flex;justify-content:center;align-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:7px;font-size:11px;background:var(--et-color-background-count-badge);color:var(--et-color-text-count-badge);}
+.evilbram-pm-sidebar > header p {color:var(--et-color-text-secondary);font-size:11px;line-height:1.4;margin:0;}
+.evilbram-pm-player-list {padding:0 10px 16px;}
+.evilbram-pm-contact-section {padding-top:9px;}
+.evilbram-pm-contact-section.offline {margin-top:15px;border-top:1px solid var(--et-color-border-divider);padding-top:16px;}
+.evilbram-pm-section-label {display:flex;align-items:center;gap:8px;padding:4px 9px 12px;color:var(--et-color-text-section);font-size:11px;font-weight:700;letter-spacing:.035em;}
+.evilbram-pm-section-dot {width:7px;height:7px;display:inline-block;border-radius:50%;background:var(--et-color-status-offline-dot);}
+.evilbram-pm-section-dot.online {background:var(--et-color-status-online);box-shadow:0 0 0 3px var(--et-color-glow-status-online);}
+.evilbram-pm-section-count {margin-left:auto;color:var(--et-color-text-secondary);font-size:10px;font-variant-numeric:tabular-nums;}
+.evilbram-pm-section-empty {font-size:11px;color:var(--et-color-text-secondary);margin:0 8px 12px;line-height:1.5;}
+.evilbram-pm-player {grid-template-columns:31px minmax(0,1fr);min-height:61px;margin-bottom:5px;border:1px solid var(--et-color-transparent);border-radius:9px;transition:background .14s ease,border-color .14s ease;}
+.evilbram-pm-player:hover {background:var(--et-color-background-contact-hover-old);}
+.evilbram-pm-player.selected {background:var(--et-color-background-contact-selected-old);outline:0;border-color:var(--et-color-border-contact-selected-old);box-shadow:inset 3px 0 0 var(--et-color-selection-marker);}
+.evilbram-pm-player.is-offline {opacity:.54;filter:saturate(.55);}
+.evilbram-pm-player.is-offline.selected {opacity:.78;}
+.evilbram-pm-recipient-check {padding-left:3px;cursor:pointer;}
+.evilbram-pm-recipient-check input {margin:0;width:15px;height:15px;accent-color:var(--et-color-checkbox-accent);cursor:pointer;}
+.evilbram-pm-recipient-check input:disabled {cursor:not-allowed;opacity:.5;}
+.evilbram-pm-player-open {gap:10px;padding:8px 8px 8px 2px;color:inherit;cursor:pointer;}
+.evilbram-pm-player-open:hover,.evilbram-pm-player-open:focus {background:var(--et-color-transparent);border:0;box-shadow:none;}
+.evilbram-pm-avatar {position:relative;flex:0 0 38px;width:38px;height:38px;display:inline-flex;}
+.evilbram-pm-player-open .evilbram-pm-avatar img,
+.evilbram-pm-thread-header .evilbram-pm-avatar img {width:38px;height:38px;border-radius:11px;border:1px solid var(--et-color-border-avatar);object-fit:cover;}
+.evilbram-pm-avatar-status {position:absolute;right:-3px;bottom:-3px;width:11px;height:11px;border-radius:50%;border:2px solid var(--et-color-background-panel);background:var(--et-color-status-offline-avatar);box-sizing:border-box;}
+.evilbram-pm-avatar-status.online {background:var(--et-color-status-avatar-online);}
+.evilbram-pm-player-text {gap:4px;}
+.evilbram-pm-player-text strong {color:var(--et-color-text-contact-name);font-size:12px;line-height:1.25;}
+.evilbram-pm-player-text small {opacity:1;color:var(--et-color-text-secondary);font-size:10px;}
+.evilbram-pm-unread {background:var(--et-color-badge-background);color:var(--et-color-background-main);box-shadow:0 2px 10px var(--et-color-shadow-unread);}
+.evilbram-pm-main {background:var(--et-color-background-main);}
+.evilbram-pm-thread-header {padding:16px 22px;gap:13px;min-height:79px;box-sizing:border-box;background:var(--et-color-background-thread-header);border-bottom:1px solid var(--et-color-border-divider);}
+.evilbram-pm-thread-header > div {gap:3px;min-width:0;}
+.evilbram-pm-thread-header strong {font-size:15px;color:var(--et-color-text-thread-name);line-height:1.1;}
+.evilbram-pm-thread-header small {color:var(--et-color-text-secondary);opacity:1;font-size:11px;}
+.evilbram-pm-history {padding:22px;gap:12px;}
+.evilbram-pm-history-item {
+  border-radius: 12px;
+  max-width: 78%;
+  min-width: 60px;
+  padding: 4px 14px;
+  background: var(--et-color-background-bubble);
+  border: 1px solid var(--et-color-border-bubble);
+  box-shadow: 0 3px 12px var(--et-color-shadow-bubble-soft);
+}
+.evilbram-pm-history-item.incoming {background:var(--et-color-background-bubble);}
+.evilbram-pm-history-item.outgoing {background:var(--et-color-background-bubble-sent);border-color:var(--et-color-border-bubble-sent);}
+.evilbram-pm-history-meta {font-size:11px;color:var(--et-color-text-message-meta);margin-bottom:7px;}
+.evilbram-pm-history-meta time {opacity:1;color:var(--et-color-text-timestamp);font-variant-numeric:tabular-nums;}
+.evilbram-pm-thread-empty {opacity:1;color:var(--et-color-text-empty);gap:5px;padding:24px;}
+.evilbram-pm-thread-empty i {display:grid;place-items:center;width:66px;height:66px;font-size:27px;color:var(--et-color-text-empty-icon);background:var(--et-color-background-empty-icon);border:1px solid var(--et-color-border-empty-icon);border-radius:20px;margin:0 0 15px;}
+.evilbram-pm-thread-empty strong {font-size:15px;color:var(--et-color-text-empty-title);font-weight:650;}
+.evilbram-pm-thread-empty p {font-size:12px;max-width:280px;line-height:1.6;margin:2px 0 0;}
+.evilbram-pm-composer {padding:14px 20px 16px;background:linear-gradient(180deg,var(--et-color-background-panel-top),var(--et-color-background-composer-bottom));border-top:1px solid var(--et-color-border-divider);}
+.evilbram-pm-composer-label {display:flex;align-items:center;gap:9px;margin-bottom:9px;color:var(--et-color-text-composer-label);font-size:11px;font-weight:700;}
+.evilbram-pm-composer-label span {font-size:9px;letter-spacing:.12em;color:var(--et-color-text-tag);background:var(--et-color-background-bubble-sent);border-radius:4px;padding:3px 6px;}
+.evilbram-pm-composer textarea {background:var(--et-color-background-main);color:var(--et-color-text-input);border:1px solid var(--et-color-border-input);border-radius:9px;padding:12px 14px;min-height:84px;max-height:190px;line-height:1.5;box-shadow:inset 0 1px 5px var(--et-color-shadow-input-inset);}
+.evilbram-pm-composer textarea:focus {outline:0;border-color:var(--et-color-border-input-focus);box-shadow:0 0 0 2px var(--et-color-focus-ring-input);}
+.evilbram-pm-composer textarea::placeholder {color:var(--et-color-text-placeholder);}
+.evilbram-pm-send-options {gap:9px;margin-top:11px;justify-content:flex-end;}
+.evilbram-pm-send {
+  min-width: 170px;
+  min-height: 35px;
+  border-radius: 7px;
+  border: 1px solid var(--et-color-border-button-primary);
+  color: var(--et-color-text-button);
+  background: var(--et-color-background-send);
+  padding: 7px 12px;
+  font-size: 13px;
+}
+.evilbram-pm-send:hover {background:var(--et-color-background-send-hover);border-color:var(--et-color-border-button-hover);color:var(--et-color-white);}
+.evilbram-pm-send-classic {background:var(--et-color-background-send);border-color:var(--et-color-border-button-secondary);}
+.evilbram-pm-send i {margin-right:7px;}
+@media (max-width:760px) {
+  .evilbram-pm-dashboard-content {grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);}
+  .evilbram-pm-sidebar {max-height:200px;border-right:0;border-bottom:1px solid var(--et-color-border-divider);}
+  .evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading {padding:10px 14px;}
+  .evilbram-pm-sidebar > header p,.evilbram-pm-eyebrow {display:none;}
+  .evilbram-pm-player-list {padding-bottom:7px;}
+  .evilbram-pm-thread-header {min-height:65px;}
+  .evilbram-pm-history {padding:12px;}
+  .evilbram-pm-composer {padding:10px;}
+  .evilbram-pm-send {min-width:0;flex:1;}
+}
+
+/* Palette partagée par les trois fenêtres ; aucun style global Foundry. */
+.evilbram-pm-reply,
+.evilbram-pm-notification {
+  color: var(--et-color-text-primary);
+}
+.evilbram-pm-reply .window-content,
+.evilbram-pm-notification .window-content {
+  background:var(--et-color-background-main);color:var(--et-color-text-primary);
+}
+.evilbram-pm-reply-content {padding:0;gap:0;background:var(--et-color-background-main);}
+.evilbram-pm-popup-peer {
+  min-height:78px;box-sizing:border-box;padding:14px 20px;gap:12px;
+  background:linear-gradient(155deg,var(--et-color-background-popup-top),var(--et-color-background-panel));
+  border-bottom:1px solid var(--et-color-border-divider);
+}
+.evilbram-pm-popup-peer > div {gap:3px;min-width:0;}
+.evilbram-pm-popup-peer strong {color:var(--et-color-text-popup-name);font-size:15px;}
+.evilbram-pm-popup-peer small {opacity:1;color:var(--et-color-text-secondary);font-size:11px;}
+.evilbram-pm-reply .evilbram-pm-avatar img {
+  width:38px;height:38px;border:1px solid var(--et-color-border-avatar);border-radius:11px;object-fit:cover;
+}
+.evilbram-pm-reply .evilbram-pm-avatar-status {border-color:var(--et-color-background-avatar-ring);}
+.evilbram-pm-player-history {
+  max-height:none;padding:16px 19px;gap:11px;
+  background:var(--et-color-background-main);
+}
+.evilbram-pm-player-history-item {
+  min-width: 60px;
+  max-width: 78%;
+  padding: 4px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--et-color-border-bubble);
+  background: var(--et-color-background-bubble);
+  box-shadow: 0 3px 12px var(--et-color-shadow-bubble-soft);
+}
+.evilbram-pm-player-history-item.from-gm {background:var(--et-color-background-bubble);}
+.evilbram-pm-player-history-item.from-player {background:var(--et-color-background-bubble-sent);border-color:var(--et-color-border-bubble-sent);}
+.evilbram-pm-player-history-meta {font-size:11px;color:var(--et-color-text-message-meta);margin-bottom:7px;}
+.evilbram-pm-player-history-meta time {opacity:1;color:var(--et-color-text-timestamp);}
+.evilbram-pm-player-history-empty {
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  font-size:12px;color:var(--et-color-text-empty);opacity:1;
+}
+.evilbram-pm-player-history-empty i {
+  display:grid;place-items:center;width:54px;height:54px;border-radius:16px;
+  font-size:23px;color:var(--et-color-text-empty-icon);background:var(--et-color-background-empty-icon);
+  border:1px solid var(--et-color-border-empty-icon);
+}
+.evilbram-pm-reply-compose {
+  flex:0 0 auto;padding:13px 19px 16px;
+  background:linear-gradient(180deg,var(--et-color-background-panel-top),var(--et-color-background-composer-bottom));border-top:1px solid var(--et-color-border-divider);
+}
+.evilbram-pm-reply-label {display:flex;align-items:center;gap:9px;font-size:11px;color:var(--et-color-text-composer-label);margin-bottom:9px;}
+.evilbram-pm-reply-label span {font-size:9px;letter-spacing:.12em;color:var(--et-color-text-tag);background:var(--et-color-background-bubble-sent);border-radius:4px;padding:3px 6px;}
+.evilbram-pm-reply textarea {
+  min-height:75px;max-height:175px;padding:11px 13px;
+  background:var(--et-color-background-main);color:var(--et-color-text-input);border:1px solid var(--et-color-border-input);
+  border-radius:9px;line-height:1.5;box-shadow:inset 0 1px 5px var(--et-color-shadow-input-inset);
+}
+.evilbram-pm-reply textarea:focus {outline:0;border-color:var(--et-color-border-input-focus);box-shadow:0 0 0 2px var(--et-color-focus-ring-input);}
+.evilbram-pm-reply textarea::placeholder {color:var(--et-color-text-placeholder);}
+.evilbram-pm-reply-actions {margin-top:10px;}
+.evilbram-pm-reply-actions button {
+  min-height: 35px;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: 1px solid var(--et-color-border-button-primary);
+  background: var(--et-color-background-send);
+  color: var(--et-color-text-button);
+  font-size: 13px;
+  font-weight: 100;
+}
+.evilbram-pm-reply-actions button:hover {background:var(--et-color-background-send-hover);border-color:var(--et-color-border-button-hover);color:var(--et-color-white);}
+.evilbram-pm-reply-actions button i {margin-right:7px;}
+
+.evilbram-pm-notification-content {
+  padding:17px;grid-template-columns:44px minmax(0,1fr);gap:12px;
+  background:linear-gradient(145deg,var(--et-color-background-avatar-ring),var(--et-color-background-sidebar-bottom));
+  border:1px solid var(--et-color-border-notification);
+}
+.evilbram-pm-notification-icon {
+  width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+  font-size:20px;color:var(--et-color-text-notification-icon);border:1px solid var(--et-color-border-notification-icon);
+  background:var(--et-color-background-notification-icon);
+}
+.evilbram-pm-notification-text {gap:3px;}
+.evilbram-pm-notification-kicker {
+  font-size:9px!important;letter-spacing:.13em;color:var(--et-color-text-notification-kicker)!important;
+  opacity:1!important;font-weight:700;
+}
+.evilbram-pm-notification-text strong {font-size:15px;color:var(--et-color-text-notification-name);line-height:1.3;overflow-wrap:anywhere;}
+.evilbram-pm-notification-text > span:last-child {color:var(--et-color-text-secondary);font-size:11px;opacity:1;}
+.evilbram-pm-notification-actions {padding-top:10px;border-top:1px solid var(--et-color-border-divider);gap:9px;}
+.evilbram-pm-notification-actions button {
+  min-height:34px;padding:6px 11px;border-radius:7px;border:1px solid var(--et-color-border-button-secondary);
+  color:var(--et-color-text-button-secondary);background:var(--et-color-transparent);font-size:11px;font-weight:700;
+}
+.evilbram-pm-notification-actions button:last-child {border-color:var(--et-color-border-button-primary);background:var(--et-color-background-button);}
+.evilbram-pm-notification-actions button:hover {background:var(--et-color-background-button-hover);border-color:var(--et-color-border-button-hover);color:var(--et-color-white);}
+.evilbram-pm-notification-actions button i {margin-right:5px;}
+
+/* 0.2.2 — Lisibilité : hiérarchie épurée, sans ajouter de nouveaux éléments UI. */
+.evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading {
+  padding: 17px 18px 15px;
+  gap: 0;
+}
+.evilbram-pm-sidebar-title {font-size: 16px; font-weight: 700;}
+.evilbram-pm-contact-section {padding-top: 12px;}
+.evilbram-pm-contact-section.offline {margin-top: 11px; padding-top: 14px;}
+.evilbram-pm-section-label {padding: 2px 7px 10px; font-size: 11px; letter-spacing: .015em;}
+.evilbram-pm-player {min-height: 56px;}
+.evilbram-pm-player-text {gap: 3px;}
+.evilbram-pm-thread-header {min-height: 66px; padding: 11px 19px;}
+.evilbram-pm-thread-header > div {gap: 4px;}
+.evilbram-pm-thread-empty {min-height: 0; gap: 0;}
+.evilbram-pm-thread-empty p {font-size: 12px; color: var(--et-color-text-empty-muted); margin: 0;}
+.evilbram-pm-composer {padding: 13px 18px 14px;}
+.evilbram-pm-composer textarea {min-height: 84px;}
+.evilbram-pm-popup-peer {min-height: 65px; padding: 11px 18px;}
+.evilbram-pm-popup-peer > div {gap: 4px;}
+.evilbram-pm-player-history-empty {gap: 0; font-size: 12px; color: var(--et-color-text-empty-muted);}
+.evilbram-pm-reply-compose {padding: 13px 18px 15px;}
+.evilbram-pm-notification-content {padding: 14px 16px; gap: 10px;}
+.evilbram-pm-notification-text {gap: 5px;}
+.evilbram-pm-notification-text strong {font-size: 14px;}
+.evilbram-pm-notification-text > span:last-child {font-size: 12px;}
+@media (max-width:760px) {
+  .evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading {padding: 10px 14px;}
+}
+
+/* 0.2.4 — Alignement des en-têtes et relief discret.
+   Les deux bandeaux partagent la même hauteur sans toucher à leur contenu. */
+.evilbram-pm-dashboard .evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading,
+.evilbram-pm-dashboard .evilbram-pm-thread-header {
+  box-sizing: border-box;
+  height: 66px;
+  min-height: 66px;
+  flex: 0 0 66px;
+}
+.evilbram-pm-dashboard .evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading {
+  justify-content: center;
+  padding: 0 18px;
+}
+/* Ombres doubles peu prononcées : séparation douce sans lueur colorée. */
+.evilbram-pm-dashboard .evilbram-pm-history-item,
+.evilbram-pm-reply .evilbram-pm-player-history-item {
+  box-shadow: 0 5px 12px var(--et-color-shadow-button), 0 1px 2px var(--et-color-shadow-pressed-inset), inset 0 1px 0 var(--et-color-highlight-bubble-inset);
+}
+.evilbram-pm-dashboard .evilbram-pm-send,
+.evilbram-pm-reply .evilbram-pm-reply-actions button,
+.evilbram-pm-notification .evilbram-pm-notification-actions button {
+  box-shadow: 0 3px 7px var(--et-color-shadow-button), inset 0 1px 0 var(--et-color-highlight-button-inset);
+  transition: background .14s ease, border-color .14s ease, box-shadow .14s ease;
+}
+.evilbram-pm-dashboard .evilbram-pm-send:hover:not(:disabled),
+.evilbram-pm-reply .evilbram-pm-reply-actions button:hover:not(:disabled),
+.evilbram-pm-notification .evilbram-pm-notification-actions button:hover:not(:disabled) {
+  box-shadow: 0 5px 12px var(--et-color-shadow-button-hover), inset 0 1px 0 var(--et-color-highlight-button-hover);
+}
+.evilbram-pm-dashboard .evilbram-pm-send:active:not(:disabled),
+.evilbram-pm-reply .evilbram-pm-reply-actions button:active:not(:disabled),
+.evilbram-pm-notification .evilbram-pm-notification-actions button:active:not(:disabled) {
+  box-shadow: 0 1px 3px var(--et-color-shadow-pressed), inset 0 1px 3px var(--et-color-shadow-pressed-inset);
+}
+@media (max-width:760px) {
+  .evilbram-pm-dashboard .evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading,
+  .evilbram-pm-dashboard .evilbram-pm-thread-header {
+    height: 65px; min-height: 65px; flex-basis: 65px;
+  }
+  .evilbram-pm-dashboard .evilbram-pm-sidebar > header.evilbram-pm-sidebar-heading {padding: 0 14px;}
+}
+
+/* 0.2.5 — Contacts épurés : des lignes sans encadrement de carte. */
+.evilbram-pm-dashboard .evilbram-pm-player {
+  border: 0;
+  border-radius: 6px;
+  box-shadow: none;
+  background: var(--et-color-transparent);
+  transition: background .14s ease;
+}
+.evilbram-pm-dashboard .evilbram-pm-player:hover {
+  background: var(--et-color-background-contact-hover);
+  border: 0;
+  box-shadow: none;
+}
+.evilbram-pm-dashboard .evilbram-pm-player.selected,
+.evilbram-pm-dashboard .evilbram-pm-player.selected:hover {
+  background: var(--et-color-background-contact-selected);
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+/* 0.2.8 — Barres de défilement de la messagerie : priorité sur les thèmes système.
+   Portée limitée aux listes de contacts et historiques des fenêtres Evilbram Messenger. */
+.evilbram-pm-dashboard .evilbram-pm-player-list,
+.evilbram-pm-dashboard .evilbram-pm-history,
+.evilbram-pm-reply .evilbram-pm-player-history {
+  scrollbar-color: var(--et-color-scrollbar-thumb) var(--et-color-scrollbar-track) !important;
+}
+
+.evilbram-pm-dashboard .evilbram-pm-player-list::-webkit-scrollbar-thumb,
+.evilbram-pm-dashboard .evilbram-pm-history::-webkit-scrollbar-thumb,
+.evilbram-pm-reply .evilbram-pm-player-history::-webkit-scrollbar-thumb {
+  background-color: var(--et-color-scrollbar-thumb) !important;
+}
+
+.evilbram-pm-dashboard .evilbram-pm-player-list::-webkit-scrollbar-track,
+.evilbram-pm-dashboard .evilbram-pm-history::-webkit-scrollbar-track,
+.evilbram-pm-reply .evilbram-pm-player-history::-webkit-scrollbar-track {
+  background-color: var(--et-color-scrollbar-track) !important;
+}
+
+/* 0.2.9 — Liste de contacts sans titres de statut ; séparation conservée. */
+.evilbram-pm-dashboard .evilbram-pm-contact-section {
+  padding-top: 9px;
+}
+.evilbram-pm-dashboard .evilbram-pm-contact-section.offline {
+  margin-top: 11px;
+  padding-top: 14px;
+  border-top: 1px solid var(--et-color-border-divider);
+}
+.evilbram-pm-dashboard .evilbram-pm-player-text small {
+  opacity: 1;
+  color: var(--et-color-text-secondary);
+  font-size: 12px;
+}
+.evilbram-pm-dashboard .evilbram-pm-player-text strong {
+  color: var(--et-color-text-contact-name);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+
+/* 0.2.14 — Notification MJ : portrait expéditeur + boutons harmonisés */
+.evilbram-pm-notification-icon {
+  overflow: hidden;
+}
+.evilbram-pm-notification-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.evilbram-pm-notification-actions button {
+  min-height: 34px;
+  padding: 6px 11px;
+  border-radius: 7px;
+  border: 1px solid var(--et-color-border-button-secondary);
+  color: var(--et-color-text-button-secondary);
+  background: var(--et-color-background-send);
+  font-size: 13px;
+  font-weight: 100;
+}
+.evilbram-pm-notification-actions button:last-child {
+  border-color: var(--et-color-border-button-primary);
+  background: var(--et-color-background-send);
+}
+.evilbram-pm-notification-actions button:hover,
+.evilbram-pm-notification-actions button:hover:not(:disabled) {
+  background: var(--et-color-background-send-hover);
+  border-color: var(--et-color-border-button-hover);
+  color: var(--et-color-white);
+}
+
+
+/* 0.3.1 — Heure en bas de bulle, coche à cheval sur son coin inférieur droit.
+   Position absolue = aucun espace pris dans le flux, hauteur de bulle inchangée.
+   Ajuster uniquement les quatre variables --et-pm-*-bottom/right en haut du CSS. */
+.evilbram-pm-dashboard .evilbram-pm-history-item,
+.evilbram-pm-reply .evilbram-pm-player-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  overflow: visible;
+  padding-bottom: 18px;
+}
+.evilbram-pm-message-footer {
+  /* Simple calque par-dessus la bulle : ne déplace ni texte ni bordures. */
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  line-height: 1;
+  font-size: 10px;
+  color: var(--et-color-text-timestamp);
+  font-variant-numeric: tabular-nums;
+}
+.evilbram-pm-message-footer time {
+  position: absolute;
+  bottom: var(--et-pm-time-bottom);
+  right: var(--et-pm-time-right);
+  opacity: 1;
+  white-space: nowrap;
+}
+.evilbram-pm-read-indicator {
+  display: none;
+  position: absolute;
+  bottom: var(--et-pm-read-bottom);
+  right: var(--et-pm-read-right);
+  align-items: center;
+  justify-content: center;
+  width: var(--et-pm-read-width);
+  height: var(--et-pm-read-height);
+  line-height: 1;
+  pointer-events: none;
+}
+.evilbram-pm-read-indicator img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.evilbram-pm-history-item.is-read .evilbram-pm-read-indicator,
+.evilbram-pm-player-history-item.is-read .evilbram-pm-read-indicator {
+  display: inline-flex;
+}
+.evilbram-pm-typing[hidden] {display: none !important;}
+.evilbram-pm-typing {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 20px 10px;
+  background: var(--et-color-background-main);
+  color: var(--et-color-text-secondary);
+  font-size: 11px;
+  line-height: 1.3;
+}
+.evilbram-pm-typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 12px;
+}
+.evilbram-pm-typing-dots i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--et-color-text-secondary);
+  animation: evilbram-pm-typing-pulse 1.1s ease-in-out infinite;
+}
+.evilbram-pm-typing-dots i:nth-child(2) {animation-delay: .16s;}
+.evilbram-pm-typing-dots i:nth-child(3) {animation-delay: .32s;}
+@keyframes evilbram-pm-typing-pulse {
+  0%, 65%, 100% {opacity: .45; transform: translateY(0);}
+  30% {opacity: 1; transform: translateY(-3px);}
+}
+@media (prefers-reduced-motion: reduce) {
+  .evilbram-pm-typing-dots i {animation: none; opacity: 1;}
+}
+
+/* 0.3.5 — Dégagement sous le dernier MP et scroll de l'historique. */
+.evilbram-pm-dashboard .evilbram-pm-history-item,
+.evilbram-pm-reply .evilbram-pm-player-history-item {
+  flex-shrink: 0;
+}
+.evilbram-pm-dashboard .evilbram-pm-history-item:last-of-type,
+.evilbram-pm-reply .evilbram-pm-player-history-item:last-of-type {
+  margin-bottom: var(--et-pm-typing-clearance);
+}
+
+
+/* 0.3.7 — Texture fixe derrière l'historique, non entraînée par le scroll.
+   Wrapper indépendant pour que le décor couvre TOUTE la zone visible,
+   même lorsque le fil comporte beaucoup de messages ou est défilé.
+   Le scroll reste sur la même div qu'avant : pas de changement moteur. */
+.evilbram-pm-dashboard .evilbram-pm-history-viewport,
+.evilbram-pm-reply .evilbram-pm-history-viewport {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--et-color-background-main);
+}
+.evilbram-pm-dashboard .evilbram-pm-history-viewport::before,
+.evilbram-pm-reply .evilbram-pm-history-viewport::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("../../assets/chat-texture.webp");
+  background-repeat: repeat;
+  background-size: 512px 512px;
+  opacity: var(--et-pm-texture-history-opacity);
+}
+.evilbram-pm-dashboard .evilbram-pm-history-viewport > .evilbram-pm-history,
+.evilbram-pm-reply .evilbram-pm-history-viewport > .evilbram-pm-player-history {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  background: transparent;
+}
+
+/* Texture uniquement DANS le champ de rédaction, jamais sur son panneau.
+   Le fond est un calque derrière le textarea transparent. On ne change pas
+   l'opacité du texte, de la bordure ni du curseur de saisie. */
+.evilbram-pm-dashboard .evilbram-pm-texture-field,
+.evilbram-pm-reply .evilbram-pm-texture-field {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  background: var(--et-pm-texture-input-background);
+  border-radius: 9px;
+}
+.evilbram-pm-dashboard .evilbram-pm-texture-field::before,
+.evilbram-pm-reply .evilbram-pm-texture-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("../../assets/chat-texture.webp");
+  background-repeat: repeat;
+  background-size: 512px 512px;
+  opacity: var(--et-pm-texture-composer-opacity);
+}
+.evilbram-pm-dashboard .evilbram-pm-composer .evilbram-pm-texture-field > textarea,
+.evilbram-pm-reply .evilbram-pm-reply-compose .evilbram-pm-texture-field > textarea {
+  position: relative;
+  display: block;
+  z-index: 1;
+  background: transparent;
+}
+
+
+/* 0.3.8 — Relief discret et homogène sur les surfaces.
+   Même lumière dans la colonne Contacts, les en-têtes, les zones de composition,
+   la notification MJ et les bulles. Le fond #111 de l'historique et les textures
+   du champ de saisie ne sont pas affectés. */
+.evilbram-pm-dashboard .evilbram-pm-sidebar,
+.evilbram-pm-dashboard .evilbram-pm-thread-header,
+.evilbram-pm-dashboard .evilbram-pm-composer,
+.evilbram-pm-reply .evilbram-pm-popup-peer,
+.evilbram-pm-reply .evilbram-pm-reply-compose,
+.evilbram-pm-notification .evilbram-pm-notification-content {
+  background-color: var(--et-color-background-panel);
+  background-image: var(--et-pm-surface-gradient);
+}
+
+/* Les teintes distinctes des bulles reçues et envoyées restent intactes.
+   On n'ajoute qu'une très faible variation lumineuse, identique partout. */
+.evilbram-pm-dashboard .evilbram-pm-history-item,
+.evilbram-pm-reply .evilbram-pm-player-history-item {
+  background-image: var(--et-pm-surface-gradient);
 }
