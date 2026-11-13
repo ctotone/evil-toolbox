@@ -92,7 +92,7 @@ Les formats historiques `evil-light-toolkit.ambient-light-preset` et les flags `
 
 ## Messages privés
 
-Evil Toolbox 1.5.0 généralise l'ancien centre `MP MJ` en messagerie privée accessible aux MJ et aux joueurs.
+Evil Toolbox 1.5.1 généralise l'ancien centre `MP MJ` en messagerie privée accessible aux MJ et aux joueurs.
 
 - conversations MJ ↔ joueurs et joueur ↔ joueur ;
 - sélection d’un ou plusieurs contacts connectés ;
@@ -106,7 +106,8 @@ Evil Toolbox 1.5.0 généralise l'ancien centre `MP MJ` en messagerie privée ac
 - compatibilité avec les anciens échanges `MP MJ` des versions 1.4.x ;
 - commandes de jet privées `/r` et `/roll` prises en charge ;
 - accès via `game.evilbramToolbox.privateMessages.open()` ;
-- bouton `Messages privés` dans le répertoire Actors pour tous les utilisateurs.
+- bouton `Messages privés` dans le répertoire Actors pour tous les utilisateurs ;
+- bouton dans les outils de token accessible aux MJ et aux joueurs, sans sélection de token.
 
 ## Compatibilité
 

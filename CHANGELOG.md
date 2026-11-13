@@ -1,5 +1,13 @@
 ## 1.5.1
 
+- alignement sur le comportement final d’Evilbram Messenger 1.0.0 pour la réception, les notifications et le cycle de lecture, sans intégrer sa localisation ;
+- un message entrant incrémente désormais toujours le non-lu du bon contact et n’est acquitté qu’après ouverture/sélection/restauration ou interaction utilisateur réelle avec la conversation ;
+- suppression des faux « Vu » provoqués par les rendus, scrolls automatiques ou restaurations de focus programmatiques ;
+- popup d’envoi supprimée lorsque le centre Messages privés est déjà ouvert et non réduit ; une fenêtre réduite reste éligible à la popup ;
+- mini-notification des MP classiques généralisée à tous les destinataires (MJ et joueurs), sans doublon lorsqu’une popup correspondante est déjà visible ;
+- rafraîchissement ciblé de la conversation active avec préservation du scroll, du brouillon et du focus ; les autres contacts ne mettent à jour que leur badge ;
+- accès Messages privés depuis les outils de token ouvert aux MJ et joueurs, sans modification des permissions Foundry ;
+- contact sélectionné sur fond bordeaux `#39000096` et titre `Contacts` centré en 28 px / graisse 700 ;
 - correction des chemins CSS des assets Messages privés depuis `styles/tools/` (`../../assets/...`).
 ### Messages privés — intégration des évolutions Evil Messenger 1.0.0
 - intégration dans Evil Toolbox des évolutions fonctionnelles et visuelles validées dans le module autonome Evil Messenger, sans intégrer sa couche de localisation ;

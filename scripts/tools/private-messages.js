@@ -371,6 +371,78 @@ function pmReceiptAlreadyCovers(peerId, receipt, lastMessage) {
   return typeof receipt.timestamp === "number" && receipt.timestamp > (lastMessage.timestamp ?? 0);
 }
 
+function isPmWindowVisible(app) {
+  return app?.rendered === true && app.minimized !== true;
+}
+
+/** Update existing contact badges without re-rendering the entire conversation. */
+function refreshPmUnreadBadges() {
+  const app = evilbramPmDashboardApp;
+  if (!app?.rendered) return;
+
+  for (const button of app.element.querySelectorAll('[data-action="selectConversation"][data-user-id]')) {
+    const unread = evilbramPmUnreadByUser.get(button.dataset.userId) ?? 0;
+    let badge = button.querySelector('.evilbram-pm-unread');
+    if (!unread) {
+      badge?.remove();
+      continue;
+    }
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'evilbram-pm-unread';
+      button.append(badge);
+    }
+    badge.textContent = String(unread);
+  }
+}
+
+/** Explicit user engagement is the only event which acknowledges the active thread. */
+function acknowledgePmConversation(peerId, app) {
+  if (!peerId || !isPmWindowVisible(app)) return;
+  evilbramPmUnreadByUser.delete(peerId);
+  refreshPmUnreadBadges();
+  // A dismissible notification is no longer relevant once its conversation is read.
+  if (evilbramPmNotificationApp?.rendered &&
+      evilbramPmNotificationApp.senderUserId === peerId) {
+    void evilbramPmNotificationApp.close();
+  }
+  void markPmConversationRead(peerId);
+}
+
+/** Bind only once per outer frame; never treat an automatic render as a read. */
+function bindPmReadInteractions(app, getPeerId) {
+  const root = app.element;
+  if (app._pmReadBoundRoot === root) return;
+  app._pmReadBoundRoot = root;
+
+  const onInteraction = event => {
+    if (!event.isTrusted || !isPmWindowVisible(app)) return;
+    // Programmatic focus restoration after a render is not a new reading action.
+    if (event.type === 'focusin' && app._pmSuppressFocusRead) return;
+    // The conversation selection handler will acknowledge the *new* contact.
+    if (event.target instanceof Element &&
+        event.target.closest('[data-action="selectConversation"]')) return;
+    acknowledgePmConversation(getPeerId(), app);
+  };
+  for (const type of ['pointerdown', 'keydown', 'wheel', 'focusin']) {
+    root.addEventListener(type, onInteraction, { capture: true });
+  }
+  // Ne pas écouter `scroll` : un défilement provoqué par le rendu automatique
+  // peut lui aussi générer un événement natif et simuler une fausse lecture.
+  // Les actions utilisateur de défilement sont déjà couvertes par wheel,
+  // pointerdown (barre de défilement/tactile) et keydown.
+}
+
+function focusPmWithoutReadReceipt(app, textarea) {
+  if (!textarea) return;
+  app._pmSuppressFocusRead = true;
+  try {
+    textarea.focus({ preventScroll: true });
+  } finally {
+    app._pmSuppressFocusRead = false;
+  }
+}
+
 function markPmConversationRead(peerId) {
   if (!peerId || !game.user || peerId === game.user.id) return Promise.resolve();
   const inbound = getConversationMessages(peerId).filter(message => {
@@ -581,7 +653,9 @@ async function openPmDashboard({ userId = null, playerUserId = null } = {}) {
         await evilbramPmDashboardApp.render();
       }
     }
+    if (evilbramPmDashboardApp.minimized) await evilbramPmDashboardApp.maximize();
     evilbramPmDashboardApp.bringToFront();
+    acknowledgePmConversation(evilbramPmDashboardApp.selectedThreadUserId, evilbramPmDashboardApp);
     return;
   }
 
@@ -592,6 +666,7 @@ async function openPmDashboard({ userId = null, playerUserId = null } = {}) {
     if (evilbramPmDashboardApp === app) evilbramPmDashboardApp = null;
   });
   await app.render({ force: true });
+  acknowledgePmConversation(app.selectedThreadUserId, app);
 }
 
 class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicationMixin(
@@ -647,13 +722,33 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
     // Changer de conversation sélectionne ce seul destinataire.
     // Pour un envoi à plusieurs utilisateurs, les cases restent cochables manuellement.
     this.selectedRecipients = new Set(user.active ? [user.id] : []);
-    evilbramPmUnreadByUser.delete(user.id);
 
     // Ne pas laisser un signal « écrit… » actif chez les destinataires précédents.
     if (this.draft.trim()) updatePmLocalTyping("dashboard", this.getTypingRecipients());
     else stopPmLocalTyping("dashboard");
 
-    return this.render().catch(err => console.error("Evil Toolbox | Conversation", err));
+    return this.render().then(() => {
+      acknowledgePmConversation(user.id, this);
+    }).catch(err => console.error("Evil Toolbox | Conversation", err));
+  }
+
+  /** Keep the reader's scroll position and composer focus after an incoming MP. */
+  async refreshIncomingConversation() {
+    const history = this.element.querySelector('.evilbram-pm-history');
+    const textarea = this.element.querySelector('[data-pm-draft]');
+    const atBottom = !history || history.scrollHeight - history.scrollTop - history.clientHeight <= 40;
+    this._pmHistoryRestore = {
+      peerId: this.selectedThreadUserId,
+      atBottom,
+      scrollTop: history?.scrollTop ?? 0,
+      editing: document.activeElement === textarea
+    };
+    await this.render();
+  }
+
+  async maximize(...args) {
+    await super.maximize(...args);
+    acknowledgePmConversation(this.selectedThreadUserId, this);
   }
 
   async _prepareContext(options) {
@@ -722,11 +817,19 @@ class EvilbramPmDashboardApp extends foundry.applications.api.HandlebarsApplicat
       else stopPmLocalTyping("dashboard");
     });
 
+    bindPmReadInteractions(this, () => this.selectedThreadUserId);
     const history = this.element.querySelector(".evilbram-pm-history");
-    scrollPmHistoryToBottom(history);
+    const restore = this._pmHistoryRestore;
+    this._pmHistoryRestore = null;
+    if (restore && restore.peerId === this.selectedThreadUserId) {
+      if (restore.atBottom) scrollPmHistoryToBottom(history);
+      else if (history) history.scrollTop = restore.scrollTop;
+      if (restore.editing) focusPmWithoutReadReceipt(this, textarea);
+    } else {
+      scrollPmHistoryToBottom(history);
+    }
     refreshPmTypingIndicators();
-    // Appeler seulement après affichage effectif de la conversation.
-    void markPmConversationRead(this.selectedThreadUserId);
+    // Rendering is never a read receipt: only opening/selecting/interacting is.
   }
 
   static async #onSelectConversation(event, target) {
@@ -808,13 +911,6 @@ async function openPmReplyPopup(message) {
 
   if (evilbramPmReplyApp?.rendered) await evilbramPmReplyApp.close();
 
-  // Une conversation affichée dans la popup est également consultée.
-  evilbramPmUnreadByUser.delete(peerUserId);
-  const dashboardElement = evilbramPmDashboardApp?.rendered ? evilbramPmDashboardApp.element : null;
-  const contactButton = [...(dashboardElement?.querySelectorAll('[data-action="selectConversation"]') ?? [])]
-    .find(button => button.dataset.userId === peerUserId);
-  contactButton?.querySelector(".evilbram-pm-unread")?.remove();
-
   evilbramPmReplyApp = new EvilbramPmReplyApp(message, peerUserId);
   const app = evilbramPmReplyApp;
   app.addEventListener("close", () => {
@@ -823,6 +919,7 @@ async function openPmReplyPopup(message) {
     if (evilbramPmReplyApp === app) evilbramPmReplyApp = null;
   });
   await app.render({ force: true });
+  acknowledgePmConversation(peerUserId, app);
 }
 
 class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationMixin(
@@ -897,12 +994,40 @@ class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationM
       if (this.reply.trim()) updatePmLocalTyping("reply", [this.peerUserId]);
       else stopPmLocalTyping("reply");
     });
-    textarea?.focus();
+    // Avoid stealing focus on every automatic update of an existing popup.
+    if (!this._pmInitiallyFocused) {
+      focusPmWithoutReadReceipt(this, textarea);
+      this._pmInitiallyFocused = true;
+    }
 
+    bindPmReadInteractions(this, () => this.peerUserId);
     const history = this.element.querySelector(".evilbram-pm-player-history");
-    scrollPmHistoryToBottom(history);
+    const restore = this._pmHistoryRestore;
+    this._pmHistoryRestore = null;
+    if (restore) {
+      if (restore.atBottom) scrollPmHistoryToBottom(history);
+      else if (history) history.scrollTop = restore.scrollTop;
+      if (restore.editing) focusPmWithoutReadReceipt(this, textarea);
+    } else {
+      scrollPmHistoryToBottom(history);
+    }
     refreshPmTypingIndicators();
-    void markPmConversationRead(this.peerUserId);
+  }
+
+  async refreshIncomingConversation() {
+    const history = this.element.querySelector('.evilbram-pm-player-history');
+    const textarea = this.element.querySelector('[data-pm-reply-draft]');
+    this._pmHistoryRestore = {
+      atBottom: !history || history.scrollHeight - history.scrollTop - history.clientHeight <= 40,
+      scrollTop: history?.scrollTop ?? 0,
+      editing: document.activeElement === textarea
+    };
+    await this.render();
+  }
+
+  async maximize(...args) {
+    await super.maximize(...args);
+    acknowledgePmConversation(this.peerUserId, this);
   }
 
   static async #onSendReply() {
@@ -930,8 +1055,7 @@ class EvilbramPmReplyApp extends foundry.applications.api.HandlebarsApplicationM
   }
 }
 
-async function showGmIncomingNotification(message) {
-  if (!game.user.isGM) return;
+async function showPmIncomingNotification(message) {
 
   const participants = getPmParticipants(message);
   if (!participants || participants.recipientUserId !== game.user.id) return;
@@ -1042,32 +1166,42 @@ async function handleCreatedPmMessage(message) {
   const peerUserId = participants.senderUserId;
   const flag = participants.flag;
 
-  const dashboardOpen = evilbramPmDashboardApp?.rendered === true;
-  const viewingDashboard = dashboardOpen && evilbramPmDashboardApp.selectedThreadUserId === peerUserId;
-  const viewingPopup = evilbramPmReplyApp?.rendered === true && evilbramPmReplyApp.peerUserId === peerUserId;
+  const dashboard = evilbramPmDashboardApp;
+  const dashboardVisible = isPmWindowVisible(dashboard);
+  const replyApp = evilbramPmReplyApp;
+  const replyVisibleForPeer = isPmWindowVisible(replyApp) && replyApp.peerUserId === peerUserId;
 
-  if (!viewingDashboard && !viewingPopup) {
-    evilbramPmUnreadByUser.set(
-      peerUserId,
-      (evilbramPmUnreadByUser.get(peerUserId) ?? 0) + 1
-    );
-  } else {
-    evilbramPmUnreadByUser.delete(peerUserId);
+  // A new message is unread until the reader interacts with its conversation.
+  // Merely displaying/rerendering a window (possibly behind another) does not read it.
+  evilbramPmUnreadByUser.set(
+    peerUserId,
+    (evilbramPmUnreadByUser.get(peerUserId) ?? 0) + 1
+  );
+
+  // Only update a visible conversation when it is the active thread.
+  // A different active thread needs only its sidebar badge updated.
+  if (dashboard?.rendered) {
+    if (dashboard.selectedThreadUserId === peerUserId) {
+      await dashboard.refreshIncomingConversation();
+    }
+    refreshPmUnreadBadges();
   }
 
-  if (dashboardOpen) await evilbramPmDashboardApp.render();
-
-  if (flag?.popup === true) {
+  if (flag?.popup === true && !dashboardVisible && !replyVisibleForPeer) {
+    // When the main messenger is minimized, an explicit popup send can open.
     await openPmReplyPopup(message);
     return;
   }
 
-  // Une popup déjà ouverte sur ce contact affiche aussi les nouveaux MP classiques.
-  if (viewingPopup && evilbramPmReplyApp?.rendered) await evilbramPmReplyApp.render();
+  // Keep a matching reply popup up to date for ordinary messages as well.
+  if (replyApp?.rendered && replyApp.peerUserId === peerUserId) {
+    await replyApp.refreshIncomingConversation();
+  }
 
-  // Une notification seule n'est jamais considérée comme une lecture.
-  if (game.user.isGM && !dashboardOpen && !viewingPopup) {
-    await showGmIncomingNotification(message);
+  // A visible messenger is already a notification surface (sidebar badges).
+  // Otherwise notify *any* recipient: GM, player or player-to-player.
+  if (flag?.popup !== true && !dashboardVisible && !replyVisibleForPeer) {
+    await showPmIncomingNotification(message);
   }
 }
 
@@ -1154,7 +1288,7 @@ Hooks.once("ready", () => {
 });
 
 Hooks.on("getSceneControlButtons", controls => {
-  if (!game.user.isGM) return;
+  // Accès rapide pour tous les utilisateurs, sans modifier les permissions d'envoi.
   const tokens = controls.tokens;
   if (!tokens?.tools) return;
 
