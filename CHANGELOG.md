@@ -1,4 +1,4 @@
-## 1.5.1
+## 1.5.2
 
 - alignement sur le comportement final d’Evilbram Messenger 1.0.0 pour la réception, les notifications et le cycle de lecture, sans intégrer sa localisation ;
 - un message entrant incrémente désormais toujours le non-lu du bon contact et n’est acquitté qu’après ouverture/sélection/restauration ou interaction utilisateur réelle avec la conversation ;
