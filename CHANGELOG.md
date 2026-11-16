@@ -1,3 +1,15 @@
+## 1.6.0
+
+- ajout du compendium `EVILBRAM - Règles systèmes de jeu` (`JournalEntry`) dans le dossier de compendiums `EVILBRAM - Toolbox` ;
+- ajout de l’Assistant MJ CoC7, initialisé uniquement lorsque le world utilise le système `CoC7` ;
+- monitoring passif uniquement : Toolbox n’effectue aucun jet, n’ajoute/retire aucun état et ne modifie aucune donnée de personnage ;
+- surveillance des événements prioritaires liés aux PV : Blessure grave, mort instantanée, passage à 0 PV avec/sans Blessure grave et fin possible de Blessure grave ;
+- surveillance des événements prioritaires liés à la SAN : perte ponctuelle de 5+, franchissement du seuil cumulé du cinquième, nouvelle perte pendant une folie sous-jacente et SAN à 0 ;
+- collisions regroupées pour éviter les alertes multiples ou contradictoires sur un même événement ;
+- notification visuelle compacte inspirée de la mini-notification Messenger, avec thème rouge dédié au monitoring MJ ;
+- détail opérationnel envoyé uniquement au MJ actif via un ChatMessage whisper privé, sans style spécifique ajouté par Toolbox ;
+- aucune modification fonctionnelle des outils Ownership Viewer, Visuels MJ, Lighting Toolkit ou Messages privés.
+
 ## 1.5.2
 
 - alignement sur le comportement final d’Evilbram Messenger 1.0.0 pour la réception, les notifications et le cycle de lecture, sans intégrer sa localisation ;

@@ -1,6 +1,6 @@
 # Evilbram Toolbox
 
-Version : 1.4.2
+Version : 1.6.0
 
 Identifiant technique : `evil-toolbox`
 
@@ -9,6 +9,7 @@ Identifiant technique : `evil-toolbox`
 - EVILBRAM - Playlists JDR
 - EVILBRAM - Bruitages & FX
 - EVILBRAM - Macros
+- EVILBRAM - Règles systèmes de jeu
 
 ## Contenu
 
@@ -109,6 +110,20 @@ Evil Toolbox 1.5.2 généralise l'ancien centre `MP MJ` en messagerie privée ac
 - bouton `Messages privés` dans le répertoire Actors pour tous les utilisateurs ;
 - bouton dans les outils de token accessible aux MJ et aux joueurs, sans sélection de token.
 
+## Assistant MJ CoC7
+
+Evil Toolbox 1.6.0 ajoute un monitoring passif dédié à **L’Appel de Cthulhu 7e édition**.
+
+- activation uniquement lorsque le système du world est `CoC7` ;
+- monitoring uniquement côté MJ ; un seul MJ actif émet les alertes ;
+- aucune règle n’est appliquée automatiquement : aucun jet, état ou changement de fiche n’est effectué par Toolbox ;
+- surveillance des principaux seuils mécaniques liés aux PV, blessures graves, état mourant et SAN ;
+- petite notification rouge inspirée de la mini-notification Messenger ;
+- détail de la règle et marche à suivre envoyé au MJ sous forme de whisper Foundry privé, sans style spécifique ;
+- regroupement des événements liés afin d’éviter les notifications en cascade ou contradictoires.
+
+Le compendium `EVILBRAM - Règles systèmes de jeu` est rangé dans le dossier `EVILBRAM - Toolbox`.
+
 ## Compatibilité
 
 - Foundry VTT minimum : v14
@@ -116,7 +131,7 @@ Evil Toolbox 1.5.2 généralise l'ancien centre `MP MJ` en messagerie privée ac
 
 ## Statut
 
-Version 1.5.2 : généralisation de la messagerie privée aux MJ et joueurs.
+Version 1.6.0 : ajout de l’Assistant MJ CoC7 et du compendium transversal de règles.
 
 
 ### Messages privés — 1.5.2

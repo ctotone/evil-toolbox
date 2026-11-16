@@ -2,7 +2,7 @@
   "id": "evil-toolbox",
   "title": "Evilbram Toolbox",
   "description": "Boîte à outils transversale pour Foundry VTT : playlists, bruitages, macros MJ/joueur, visualisation des permissions, partage de visuels, outils d’éclairage et utilitaires réutilisables entre plusieurs mondes.",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "authors": [
     {
       "name": "Evilbram",
@@ -63,6 +63,17 @@
         "TRUSTED": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "evilbram-regles-systemes",
+      "label": "EVILBRAM - Règles systèmes de jeu",
+      "path": "./packs/evilbram-regles-systemes",
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "NONE",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -78,20 +89,23 @@
       "name": "EVILBRAM - Toolbox",
       "sorting": "a",
       "packs": [
-        "macros"
+        "macros",
+        "evilbram-regles-systemes"
       ]
     }
   ],
   "scripts": [
     "scripts/tools/ownership-viewer.js",
     "scripts/tools/visual-library.js",
-    "scripts/tools/private-messages.js"
+    "scripts/tools/private-messages.js",
+    "scripts/tools/coc7-monitor.js"
   ],
   "styles": [
     "styles/tools/ownership-viewer.css",
     "styles/tools/visual-library.css",
     "styles/tools/lighting-toolkit.css",
-    "styles/tools/private-messages.css"
+    "styles/tools/private-messages.css",
+    "styles/tools/coc7-monitor.css"
   ],
   "socket": true,
   "esmodules": [
